@@ -1,2 +1,2 @@
 # elektronski-dnevnik
-Rešenje za elektronske dnevnike za osnovne i srednje škole
+Implementacija rešenja elektronskog dnevnika za osnovne i srednje škole
