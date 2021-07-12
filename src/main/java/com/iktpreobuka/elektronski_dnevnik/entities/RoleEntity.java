@@ -12,10 +12,10 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
+import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.sun.istack.NotNull;
 
 @Entity
 @Table(name = "roles")
@@ -25,8 +25,10 @@ public class RoleEntity {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "role_id")
 	private Integer id;
-	@NotNull
+	
+	@NotBlank
 	private String name;
+	
 	@Version
 	private Integer version;
 	
