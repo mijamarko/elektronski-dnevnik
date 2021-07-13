@@ -3,7 +3,9 @@ package com.iktpreobuka.elektronski_dnevnik.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.AttributeOverride;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -21,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "ucenici")
+@AttributeOverride(name = "user_id", column = @Column(name = "ucenik_id"))
 public class UcenikEntity extends KorisnikEntity {
 	
 	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
@@ -32,7 +35,7 @@ public class UcenikEntity extends KorisnikEntity {
 	@JsonBackReference(value = "izostanci")
 	private List<IzostanakEntity> izostanci = new ArrayList<IzostanakEntity>();
 	
-	@ManyToMany
+	@ManyToMany(mappedBy = "deca")
 	private List<RoditeljEntity> roditelji = new ArrayList<RoditeljEntity>();
 
 	public UcenikEntity() {

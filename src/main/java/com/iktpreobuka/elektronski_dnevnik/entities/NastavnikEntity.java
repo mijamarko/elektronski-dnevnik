@@ -3,10 +3,10 @@ package com.iktpreobuka.elektronski_dnevnik.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -15,10 +15,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "nastavnici")
+@AttributeOverride(name = "user_id", column = @Column(name = "nastavnik_id"))
 public class NastavnikEntity extends ProsvetniRadnikEntity {
 	
-	@ManyToMany
-	private List<PredmetEntity> predmetiKojePredaje = new ArrayList<PredmetEntity>();
 	
 	@OneToMany
 	private List<OcenaEntity> upisaneOcene = new ArrayList<OcenaEntity>();
@@ -26,14 +25,6 @@ public class NastavnikEntity extends ProsvetniRadnikEntity {
 	public NastavnikEntity() {
 		super();
 		// TODO Auto-generated constructor stub
-	}
-
-	public List<PredmetEntity> getPredmetiKojePredaje() {
-		return predmetiKojePredaje;
-	}
-
-	public void setPredmetiKojePredaje(List<PredmetEntity> predmetiKojePredaje) {
-		this.predmetiKojePredaje = predmetiKojePredaje;
 	}
 
 	public List<OcenaEntity> getUpisaneOcene() {
@@ -46,7 +37,7 @@ public class NastavnikEntity extends ProsvetniRadnikEntity {
 
 	@Override
 	public String toString() {
-		return "NastavnikEntity [predmetiKojePredaje=" + predmetiKojePredaje + ", upisaneOcene=" + upisaneOcene + "]";
+		return "NastavnikEntity [upisaneOcene=" + upisaneOcene + "]";
 	}
 	
 	//TODO povezati sa ocenaentity
