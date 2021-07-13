@@ -4,8 +4,8 @@ public class Views {
 	
 	public static class Ucenik{}
 	public static class Roditelj extends Ucenik{}
-	public static class Prosvetitelj extends Roditelj{}
-	public static class Admin extends Prosvetitelj{}
+	public static class ProsvetniRadnik extends Roditelj{}
+	public static class Admin extends ProsvetniRadnik{}
 	
 
 }

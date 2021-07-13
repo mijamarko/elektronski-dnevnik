@@ -47,9 +47,72 @@ public class OdeljenjeEntity {
 	
 	@OneToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
 	@JsonBackReference(value = "razredni")
-	private ProsvetiteljEntity razredniStaresina;
+	private ProsvetniRadnikEntity razredniStaresina;
 	
 	@Version
 	private Integer version;
+
+	public OdeljenjeEntity() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public RazredEntity getRazred() {
+		return razred;
+	}
+
+	public void setRazred(RazredEntity razred) {
+		this.razred = razred;
+	}
+
+	public Integer getBrojOdeljenja() {
+		return brojOdeljenja;
+	}
+
+	public void setBrojOdeljenja(Integer brojOdeljenja) {
+		this.brojOdeljenja = brojOdeljenja;
+	}
+
+	public String getOznakaOdeljenja() {
+		return oznakaOdeljenja;
+	}
+
+	public void setOznakaOdeljenja(String oznakaOdeljenja) {
+		this.oznakaOdeljenja = oznakaOdeljenja;
+	}
+
+	public List<UcenikEntity> getUcenici() {
+		return ucenici;
+	}
+
+	public void setUcenici(List<UcenikEntity> ucenici) {
+		this.ucenici = ucenici;
+	}
+
+	public ProsvetniRadnikEntity getRazredniStaresina() {
+		return razredniStaresina;
+	}
+
+	public void setRazredniStaresina(ProsvetniRadnikEntity razredniStaresina) {
+		this.razredniStaresina = razredniStaresina;
+	}
+
+	public Integer getVersion() {
+		return version;
+	}
+
+	public void setVersion(Integer version) {
+		this.version = version;
+	}
+	
+	
 
 }

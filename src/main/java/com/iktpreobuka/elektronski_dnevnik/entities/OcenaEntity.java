@@ -46,6 +46,93 @@ public class OcenaEntity {
 	private ETip_Ocene tipOcene;
 	private EPolugodiste polugodiste;
 	
+	public OcenaEntity() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Date getDatumDodele() {
+		return datumDodele;
+	}
+
+	public void setDatumDodele(Date datumDodele) {
+		this.datumDodele = datumDodele;
+	}
+
+	public Integer getOcena() {
+		return ocena;
+	}
+
+	public void setOcena(Integer ocena) {
+		this.ocena = ocena;
+	}
+
+	public KorisnikEntity getOcenjivac() {
+		return ocenjivac;
+	}
+
+	public void setOcenjivac(KorisnikEntity ocenjivac) {
+		this.ocenjivac = ocenjivac;
+	}
+
+	public PredmetEntity getPredmet() {
+		return predmet;
+	}
+
+	public void setPredmet(PredmetEntity predmet) {
+		this.predmet = predmet;
+	}
+
+	public UcenikEntity getUcenik() {
+		return ucenik;
+	}
+
+	public void setUcenik(UcenikEntity ucenik) {
+		this.ucenik = ucenik;
+	}
+
+	public Integer getVersion() {
+		return version;
+	}
+
+	public void setVersion(Integer version) {
+		this.version = version;
+	}
+
+	public ETip_Ocene getTipOcene() {
+		return tipOcene;
+	}
+
+	public void setTipOcene(ETip_Ocene tipOcene) {
+		this.tipOcene = tipOcene;
+	}
+
+	public EPolugodiste getPolugodiste() {
+		return polugodiste;
+	}
+
+	public void setPolugodiste(EPolugodiste polugodiste) {
+		this.polugodiste = polugodiste;
+	}
+
+	@Override
+	public String toString() {
+		return "OcenaEntity [id=" + id + ", datumDodele=" + datumDodele + ", ocena=" + ocena + ", ocenjivac="
+				+ ocenjivac + ", predmet=" + predmet + ", ucenik=" + ucenik + ", version=" + version + ", tipOcene="
+				+ tipOcene + ", polugodiste=" + polugodiste + "]";
+	}
+	
+	
 	//TODO povezati sa odgovarajucim entitetima
+	
+	
 
 }

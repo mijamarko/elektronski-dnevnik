@@ -66,6 +66,7 @@ public class KorisnikEntity {
 
 	public KorisnikEntity() {
 		super();
+		// TODO Auto-generated constructor stub
 	}
 
 	public Integer getId() {
@@ -131,5 +132,7 @@ public class KorisnikEntity {
 	public void setRoles(List<RoleEntity> roles) {
 		this.roles = roles;
 	}
+
+	
 
 }
