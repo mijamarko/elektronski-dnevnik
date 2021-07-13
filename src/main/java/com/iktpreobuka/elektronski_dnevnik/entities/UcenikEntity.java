@@ -3,13 +3,19 @@ package com.iktpreobuka.elektronski_dnevnik.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @JsonIgnoreProperties({ "handler", "hibernateLazyInitializer" })
 
@@ -17,10 +23,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Table(name = "ucenici")
 public class UcenikEntity extends KorisnikEntity {
 	
-	@OneToOne
+	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+	@JsonManagedReference(value = "odeljenjeKojePohadja")
+	@JoinColumn(name = "odeljenjeKojePohadja")
 	private OdeljenjeEntity odeljenjeKojePohadja;
 	
-	@OneToMany
+	@OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY, mappedBy = "ucenikKojiJeIzostao")
+	@JsonBackReference(value = "izostanci")
 	private List<IzostanakEntity> izostanci = new ArrayList<IzostanakEntity>();
 	
 	@ManyToMany

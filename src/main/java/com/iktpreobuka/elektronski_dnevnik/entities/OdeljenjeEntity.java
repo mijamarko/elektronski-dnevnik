@@ -33,7 +33,7 @@ public class OdeljenjeEntity {
 	
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	@JsonManagedReference(value = "odeljenja")
-	@JoinColumn(name = "odeljenje_id", nullable = false)
+	@JoinColumn(name = "razred", nullable = false)
 	private RazredEntity razred;
 	
 	@Min(value = 1, message = "Odeljenje ne moze biti nulto.")
@@ -41,8 +41,8 @@ public class OdeljenjeEntity {
 	
 	private String oznakaOdeljenja; //TODO razred.getname + brojOdeljenja.toString
 	
-	@OneToMany(mappedBy = "odeljenje", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
-	@JsonManagedReference(value = "ucenici")
+	@OneToMany(mappedBy = "odeljenjeKojePohadja", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+	@JsonBackReference(value = "odeljenjeKojePohadja")
 	private List<UcenikEntity> ucenici = new ArrayList<UcenikEntity>();
 	
 	@OneToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
