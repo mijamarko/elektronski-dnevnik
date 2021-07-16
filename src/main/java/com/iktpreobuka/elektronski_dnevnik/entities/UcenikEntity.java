@@ -12,7 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -37,6 +36,10 @@ public class UcenikEntity extends KorisnikEntity {
 	
 	@ManyToMany(mappedBy = "deca")
 	private List<RoditeljEntity> roditelji = new ArrayList<RoditeljEntity>();
+	
+	@OneToMany(mappedBy = "ucenik", cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+	@JsonBackReference(value = "ocene")
+	private List<OcenaEntity> ocene = new ArrayList<OcenaEntity>();
 
 	public UcenikEntity() {
 		super();
@@ -65,12 +68,6 @@ public class UcenikEntity extends KorisnikEntity {
 
 	public void setRoditelji(List<RoditeljEntity> roditelji) {
 		this.roditelji = roditelji;
-	}
-
-	@Override
-	public String toString() {
-		return "UcenikEntity [odeljenjeKojePohadja=" + odeljenjeKojePohadja + ", izostanci=" + izostanci
-				+ ", roditelji=" + roditelji + "]";
 	}
 	
 	

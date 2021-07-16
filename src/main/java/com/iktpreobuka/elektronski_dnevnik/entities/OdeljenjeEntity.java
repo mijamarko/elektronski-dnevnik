@@ -33,13 +33,11 @@ public class OdeljenjeEntity {
 	
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	@JsonManagedReference(value = "odeljenja")
-	@JoinColumn(name = "razred", nullable = false)
+	@JoinColumn(name = "razred_id", nullable = false)
 	private RazredEntity razred;
 	
 	@Min(value = 1, message = "Odeljenje ne moze biti nulto.")
 	private Integer brojOdeljenja;
-	
-	private String oznakaOdeljenja; //TODO razred.getname + brojOdeljenja.toString
 	
 	@OneToMany(mappedBy = "odeljenjeKojePohadja", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	@JsonBackReference(value = "odeljenjeKojePohadja")
@@ -47,7 +45,7 @@ public class OdeljenjeEntity {
 	
 	@OneToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
 	@JsonBackReference(value = "razredni")
-	private ProsvetniRadnikEntity razredniStaresina;
+	private NastavnikEntity razredniStaresina;
 	
 	@Version
 	private Integer version;
@@ -81,14 +79,6 @@ public class OdeljenjeEntity {
 		this.brojOdeljenja = brojOdeljenja;
 	}
 
-	public String getOznakaOdeljenja() {
-		return oznakaOdeljenja;
-	}
-
-	public void setOznakaOdeljenja(String oznakaOdeljenja) {
-		this.oznakaOdeljenja = oznakaOdeljenja;
-	}
-
 	public List<UcenikEntity> getUcenici() {
 		return ucenici;
 	}
@@ -97,11 +87,11 @@ public class OdeljenjeEntity {
 		this.ucenici = ucenici;
 	}
 
-	public ProsvetniRadnikEntity getRazredniStaresina() {
+	public NastavnikEntity getRazredniStaresina() {
 		return razredniStaresina;
 	}
 
-	public void setRazredniStaresina(ProsvetniRadnikEntity razredniStaresina) {
+	public void setRazredniStaresina(NastavnikEntity razredniStaresina) {
 		this.razredniStaresina = razredniStaresina;
 	}
 

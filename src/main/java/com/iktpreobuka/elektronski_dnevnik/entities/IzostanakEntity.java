@@ -78,12 +78,6 @@ public class IzostanakEntity {
 	public void setUcenikKojiJeIzostao(UcenikEntity ucenikKojiJeIzostao) {
 		this.ucenikKojiJeIzostao = ucenikKojiJeIzostao;
 	}
-
-	@Override
-	public String toString() {
-		return "IzostanakEntity [id=" + id + ", tipIzostanka=" + tipIzostanka + ", datumIzostanka=" + datumIzostanka
-				+ ", ucenikKojiJeIzostao=" + ucenikKojiJeIzostao + "]";
-	}
 	
 	
 
