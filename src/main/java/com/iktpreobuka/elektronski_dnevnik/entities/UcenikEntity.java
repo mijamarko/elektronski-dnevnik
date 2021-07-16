@@ -69,12 +69,6 @@ public class UcenikEntity extends KorisnikEntity {
 	public void setRoditelji(List<RoditeljEntity> roditelji) {
 		this.roditelji = roditelji;
 	}
-
-	@Override
-	public String toString() {
-		return "UcenikEntity [odeljenjeKojePohadja=" + odeljenjeKojePohadja + ", izostanci=" + izostanci
-				+ ", roditelji=" + roditelji + "]";
-	}
 	
 	
 

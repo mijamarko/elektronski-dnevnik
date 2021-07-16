@@ -33,13 +33,11 @@ public class OdeljenjeEntity {
 	
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	@JsonManagedReference(value = "odeljenja")
-	@JoinColumn(name = "razred", nullable = false)
+	@JoinColumn(name = "razred_id", nullable = false)
 	private RazredEntity razred;
 	
 	@Min(value = 1, message = "Odeljenje ne moze biti nulto.")
 	private Integer brojOdeljenja;
-	
-	private String oznakaOdeljenja; //TODO razred.getname + brojOdeljenja.toString
 	
 	@OneToMany(mappedBy = "odeljenjeKojePohadja", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	@JsonBackReference(value = "odeljenjeKojePohadja")
@@ -79,14 +77,6 @@ public class OdeljenjeEntity {
 
 	public void setBrojOdeljenja(Integer brojOdeljenja) {
 		this.brojOdeljenja = brojOdeljenja;
-	}
-
-	public String getOznakaOdeljenja() {
-		return oznakaOdeljenja;
-	}
-
-	public void setOznakaOdeljenja(String oznakaOdeljenja) {
-		this.oznakaOdeljenja = oznakaOdeljenja;
 	}
 
 	public List<UcenikEntity> getUcenici() {

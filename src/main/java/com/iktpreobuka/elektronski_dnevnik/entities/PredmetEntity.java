@@ -8,9 +8,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.iktpreobuka.elektronski_dnevnik.entities.relationships.NastavnikPredajePredmet;
@@ -26,16 +27,14 @@ public class PredmetEntity {
 	@Column(name = "predmet_id")
 	private Integer id;
 	
+	@Column(name = "naziv_predmeta")
+	@NotBlank(message = "Naziv predmeta ne sme biti prazan.")
+	@Size(min = 5, message = "Naziv predmeta mora biti duzi od {min} karaktera.")
 	private String nazivPredmeta;
-	
-	@ManyToOne
-	private RazredEntity razredUKomSePredaje;
+
 	
 	@OneToMany(mappedBy = "predmet")
 	private List<NastavnikPredajePredmet> predavaci = new ArrayList<NastavnikPredajePredmet>();
-	
-	@OneToMany
-	private List<OcenaEntity> ocene = new ArrayList<OcenaEntity>();
 
 	public PredmetEntity() {
 		super();
@@ -58,14 +57,6 @@ public class PredmetEntity {
 		this.nazivPredmeta = nazivPredmeta;
 	}
 
-	public RazredEntity getRazredUKomSePredaje() {
-		return razredUKomSePredaje;
-	}
-
-	public void setRazredUKomSePredaje(RazredEntity razredUKomSePredaje) {
-		this.razredUKomSePredaje = razredUKomSePredaje;
-	}
-
 	public List<NastavnikPredajePredmet> getPredavaci() {
 		return predavaci;
 	}
@@ -73,13 +64,6 @@ public class PredmetEntity {
 	public void setPredavaci(List<NastavnikPredajePredmet> predavaci) {
 		this.predavaci = predavaci;
 	}
-
-	@Override
-	public String toString() {
-		return "PredmetEntity [id=" + id + ", nazivPredmeta=" + nazivPredmeta + ", razredUKomSePredaje="
-				+ razredUKomSePredaje + ", predavaci=" + predavaci + "]";
-	}
-	
 	
 
 }

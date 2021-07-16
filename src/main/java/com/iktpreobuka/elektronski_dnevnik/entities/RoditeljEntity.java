@@ -33,15 +33,6 @@ public class RoditeljEntity extends KorisnikEntity {
 
 	public void setDeca(List<UcenikEntity> deca) {
 		this.deca = deca;
-	}
-
-	@Override
-	public String toString() {
-		return "RoditeljEntity [deca=" + deca + "]";
-	}
-
-	
-	
-	
+	}	
 
 }

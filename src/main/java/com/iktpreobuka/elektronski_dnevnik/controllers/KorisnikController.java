@@ -1,5 +1,5 @@
 package com.iktpreobuka.elektronski_dnevnik.controllers;
 
-public class UserController {
+public class KorisnikController {
 
 }

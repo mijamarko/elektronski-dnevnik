@@ -35,9 +35,11 @@ public class OcenaEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
+	
 	@JsonFormat(shape = Shape.STRING, pattern = "dd-MM-yyyy")
 	@PastOrPresent
 	private Date datumDodele;
+	
 	@Range(min = 0, max = 5)
 	private Integer ocena;
 	
@@ -122,10 +124,6 @@ public class OcenaEntity {
 	public void setPolugodiste(EPolugodiste polugodiste) {
 		this.polugodiste = polugodiste;
 	}
-	
-	
-	//TODO povezati sa odgovarajucim entitetima
-	
 	
 
 }
