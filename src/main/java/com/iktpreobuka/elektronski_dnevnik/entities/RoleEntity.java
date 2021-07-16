@@ -1,5 +1,6 @@
 package com.iktpreobuka.elektronski_dnevnik.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -11,7 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.persistence.Version;
 import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -29,17 +29,14 @@ public class RoleEntity {
 	@NotBlank
 	private String name;
 	
-	@Version
-	private Integer version;
-	
 	@ManyToMany
 	@JoinTable(
-			name = "user_roles",
+			name = "UserRoles",
 			joinColumns = @JoinColumn(name = "role_id"),
 			inverseJoinColumns = @JoinColumn(name = "user_id")
 			)
 	@JsonManagedReference(value = "user_roles")
-	private List<KorisnikEntity> users;
+	private List<KorisnikEntity> users = new ArrayList<KorisnikEntity>();
 
 	public RoleEntity() {
 		super();
@@ -60,14 +57,6 @@ public class RoleEntity {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public Integer getVersion() {
-		return version;
-	}
-
-	public void setVersion(Integer version) {
-		this.version = version;
 	}
 
 	public List<KorisnikEntity> getUsers() {

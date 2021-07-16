@@ -61,7 +61,7 @@ public class KorisnikEntity {
 	private Integer version;
 
 	@ManyToMany(mappedBy = "users")
-	@JsonBackReference(value = "users_roles")
+	@JsonBackReference(value = "user_roles")
 	private List<RoleEntity> roles = new ArrayList<RoleEntity>();
 
 	public KorisnikEntity() {

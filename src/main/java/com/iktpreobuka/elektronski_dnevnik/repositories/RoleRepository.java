@@ -9,7 +9,9 @@ import com.iktpreobuka.elektronski_dnevnik.entities.RoleEntity;
 
 public interface RoleRepository extends CrudRepository<RoleEntity, Integer>{
 	
-	@Query("SELECT * FROM roles r, user_roles u  WHERE r.role_id = u.role_id AND u.user_id = ?1")
+	@Query("select roles from KorisnikEntity k where k.id=?1")
 	public ArrayList<RoleEntity> findAllByUserId(Integer userId);
+	
+	
 
 }
