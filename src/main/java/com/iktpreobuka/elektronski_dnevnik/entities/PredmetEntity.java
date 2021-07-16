@@ -8,11 +8,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.iktpreobuka.elektronski_dnevnik.entities.relationships.NastavnikPredajePredmet;
 
 @JsonIgnoreProperties({ "handler", "hibernateLazyInitializer" })
 
@@ -30,8 +31,11 @@ public class PredmetEntity {
 	@ManyToOne
 	private RazredEntity razredUKomSePredaje;
 	
-	@ManyToMany(mappedBy = "predmetiKojePredaje")
-	private List<ProsvetniRadnikEntity> predavaci = new ArrayList<ProsvetniRadnikEntity>();
+	@OneToMany(mappedBy = "predmet")
+	private List<NastavnikPredajePredmet> predavaci = new ArrayList<NastavnikPredajePredmet>();
+	
+	@OneToMany
+	private List<OcenaEntity> ocene = new ArrayList<OcenaEntity>();
 
 	public PredmetEntity() {
 		super();
@@ -62,11 +66,11 @@ public class PredmetEntity {
 		this.razredUKomSePredaje = razredUKomSePredaje;
 	}
 
-	public List<ProsvetniRadnikEntity> getPredavaci() {
+	public List<NastavnikPredajePredmet> getPredavaci() {
 		return predavaci;
 	}
 
-	public void setPredavaci(List<ProsvetniRadnikEntity> predavaci) {
+	public void setPredavaci(List<NastavnikPredajePredmet> predavaci) {
 		this.predavaci = predavaci;
 	}
 

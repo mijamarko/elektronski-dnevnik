@@ -47,7 +47,7 @@ public class OdeljenjeEntity {
 	
 	@OneToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
 	@JsonBackReference(value = "razredni")
-	private ProsvetniRadnikEntity razredniStaresina;
+	private NastavnikEntity razredniStaresina;
 	
 	@Version
 	private Integer version;
@@ -97,11 +97,11 @@ public class OdeljenjeEntity {
 		this.ucenici = ucenici;
 	}
 
-	public ProsvetniRadnikEntity getRazredniStaresina() {
+	public NastavnikEntity getRazredniStaresina() {
 		return razredniStaresina;
 	}
 
-	public void setRazredniStaresina(ProsvetniRadnikEntity razredniStaresina) {
+	public void setRazredniStaresina(NastavnikEntity razredniStaresina) {
 		this.razredniStaresina = razredniStaresina;
 	}
 

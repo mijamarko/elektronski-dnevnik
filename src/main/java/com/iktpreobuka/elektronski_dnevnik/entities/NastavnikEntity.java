@@ -3,44 +3,27 @@ package com.iktpreobuka.elektronski_dnevnik.entities;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.iktpreobuka.elektronski_dnevnik.entities.relationships.NastavnikPredajePredmet;
 
 @JsonIgnoreProperties({ "handler", "hibernateLazyInitializer" })
-
 @Entity
-@Table(name = "nastavnici")
-@AttributeOverride(name = "user_id", column = @Column(name = "nastavnik_id"))
-public class NastavnikEntity extends ProsvetniRadnikEntity {
-	
-	
-	@OneToMany
-	private List<OcenaEntity> upisaneOcene = new ArrayList<OcenaEntity>();
+public class NastavnikEntity extends KorisnikEntity{
 
-	public NastavnikEntity() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	public List<OcenaEntity> getUpisaneOcene() {
-		return upisaneOcene;
-	}
-
-	public void setUpisaneOcene(List<OcenaEntity> upisaneOcene) {
-		this.upisaneOcene = upisaneOcene;
-	}
-
-	@Override
-	public String toString() {
-		return "NastavnikEntity [upisaneOcene=" + upisaneOcene + "]";
-	}
+	@OneToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+	@JoinColumn(name = "odeljenje")
+	@JsonManagedReference(value = "razredni")
+	protected OdeljenjeEntity odeljenje;
 	
-	//TODO povezati sa ocenaentity
-	
+	@OneToMany(mappedBy = "nastavnik")
+	private List<NastavnikPredajePredmet> predmetiKojePredaje = new ArrayList<NastavnikPredajePredmet>();
 	
 }

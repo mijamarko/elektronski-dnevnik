@@ -2,12 +2,16 @@ package com.iktpreobuka.elektronski_dnevnik.entities;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
@@ -18,6 +22,8 @@ import org.hibernate.validator.constraints.Range;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.iktpreobuka.elektronski_dnevnik.entities.relationships.NastavnikPredajePredmet;
 import com.iktpreobuka.elektronski_dnevnik.enums.EPolugodiste;
 import com.iktpreobuka.elektronski_dnevnik.enums.ETip_Ocene;
 
@@ -34,16 +40,26 @@ public class OcenaEntity {
 	private Date datumDodele;
 	@Range(min = 0, max = 5)
 	private Integer ocena;
-	@ManyToOne
-	private KorisnikEntity ocenjivac;
-	@ManyToOne
-	private PredmetEntity predmet;
-	@ManyToOne
+	
+	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+	@JoinColumns({
+		@JoinColumn(name = "nastavnik"),
+		@JoinColumn(name = "predmet")
+	})
+	@JsonManagedReference(value = "ocena")
+	private NastavnikPredajePredmet nastavnikPredmet;
+	
+	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+	@JoinColumn(name = "ucenik")
+	@JsonManagedReference(value = "ocene")
 	private UcenikEntity ucenik;
+	
 	@Version
 	private Integer version;
+	
 	@Enumerated(EnumType.STRING)
 	private ETip_Ocene tipOcene;
+	@Enumerated(EnumType.STRING)
 	private EPolugodiste polugodiste;
 	
 	public OcenaEntity() {
@@ -73,22 +89,6 @@ public class OcenaEntity {
 
 	public void setOcena(Integer ocena) {
 		this.ocena = ocena;
-	}
-
-	public KorisnikEntity getOcenjivac() {
-		return ocenjivac;
-	}
-
-	public void setOcenjivac(KorisnikEntity ocenjivac) {
-		this.ocenjivac = ocenjivac;
-	}
-
-	public PredmetEntity getPredmet() {
-		return predmet;
-	}
-
-	public void setPredmet(PredmetEntity predmet) {
-		this.predmet = predmet;
 	}
 
 	public UcenikEntity getUcenik() {
@@ -121,13 +121,6 @@ public class OcenaEntity {
 
 	public void setPolugodiste(EPolugodiste polugodiste) {
 		this.polugodiste = polugodiste;
-	}
-
-	@Override
-	public String toString() {
-		return "OcenaEntity [id=" + id + ", datumDodele=" + datumDodele + ", ocena=" + ocena + ", ocenjivac="
-				+ ocenjivac + ", predmet=" + predmet + ", ucenik=" + ucenik + ", version=" + version + ", tipOcene="
-				+ tipOcene + ", polugodiste=" + polugodiste + "]";
 	}
 	
 	
