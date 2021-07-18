@@ -61,6 +61,7 @@ public class OcenaEntity {
 	
 	@Enumerated(EnumType.STRING)
 	private ETip_Ocene tipOcene;
+	
 	@Enumerated(EnumType.STRING)
 	private EPolugodiste polugodiste;
 	

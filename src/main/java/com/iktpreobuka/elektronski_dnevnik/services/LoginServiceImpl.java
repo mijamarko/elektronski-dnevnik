@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.iktpreobuka.elektronski_dnevnik.entities.KorisnikEntity;
 import com.iktpreobuka.elektronski_dnevnik.entities.RoleEntity;
-import com.iktpreobuka.elektronski_dnevnik.repositories.RoleRepository;
+import com.iktpreobuka.elektronski_dnevnik.repositories.KorisnikRepository;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -21,12 +21,12 @@ import io.jsonwebtoken.SignatureAlgorithm;
 public class LoginServiceImpl implements LoginService {
 	
 	@Autowired
-	private RoleRepository roleRepository;
+	private KorisnikRepository korisnikRepository;
 
 	@Override
 	public String getJWT(KorisnikEntity korisnik, String secretKey, Integer tokenDuration) {
 		//get all roles for specified id
-		ArrayList<RoleEntity> roles = roleRepository.findAllByUserId(korisnik.getId());
+		ArrayList<RoleEntity> roles = korisnikRepository.findAllByUserId(korisnik.getId());
 		
 		//najponosniji na ovo ikada
 		List<GrantedAuthority> grantedAuthority = AuthorityUtils.commaSeparatedStringToAuthorityList(roles

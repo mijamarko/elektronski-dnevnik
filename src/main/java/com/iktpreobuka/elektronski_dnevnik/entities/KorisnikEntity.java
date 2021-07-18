@@ -41,7 +41,7 @@ public class KorisnikEntity {
 	@NotBlank(message = "Lozinka ne moze biti prazna.")
 	@Size(min = 8, max = 20, message = "Lozinka mora biti duzine izmedju {min} i {max} karaktera.")
 	@Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$",
-	message = "Lozinka mora biti duzine izmedju {min} i {max} karaktera. Lozinka mora sadrzati barem jedno uppercase slovo, barem jedno lowercase slovo,"
+	message = "Lozinka mora biti duzine izmedju {min} i {max} karaktera. Lozinka mora sadrzati barem jedno veliko slovo, barem jedno malo slovo,"
 			+ " barem jedan broj, i barem jedan specijalni karakter.")
 	private String sifra;
 	

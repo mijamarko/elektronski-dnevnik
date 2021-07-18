@@ -38,4 +38,54 @@ public class NastavnikPredajePredmet {
 	@JsonBackReference(value = "ocena")
 	private List<OcenaEntity> ocena = new ArrayList<OcenaEntity>();
 
+	public NastavnikPredajePredmet() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	
+	
+
+	public NastavnikPredajePredmet(NastavnikEntity nastavnik, PredmetEntity predmet, List<OcenaEntity> ocena) {
+		super();
+		this.nastavnik = nastavnik;
+		this.predmet = predmet;
+		this.ocena = ocena;
+	}
+
+
+
+	public PredajeKey getId() {
+		return id;
+	}
+
+	public void setId(PredajeKey id) {
+		this.id = id;
+	}
+
+	public NastavnikEntity getNastavnik() {
+		return nastavnik;
+	}
+
+	public void setNastavnik(NastavnikEntity nastavnik) {
+		this.nastavnik = nastavnik;
+	}
+
+	public PredmetEntity getPredmet() {
+		return predmet;
+	}
+
+	public void setPredmet(PredmetEntity predmet) {
+		this.predmet = predmet;
+	}
+
+	public List<OcenaEntity> getOcena() {
+		return ocena;
+	}
+
+	public void setOcena(List<OcenaEntity> ocena) {
+		this.ocena = ocena;
+	}
+	
+	
+
 }
