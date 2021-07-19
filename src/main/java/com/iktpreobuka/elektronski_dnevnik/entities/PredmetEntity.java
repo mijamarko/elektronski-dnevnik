@@ -38,7 +38,6 @@ public class PredmetEntity {
 
 	public PredmetEntity() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public Integer getId() {

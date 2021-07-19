@@ -43,7 +43,6 @@ public class UcenikEntity extends KorisnikEntity {
 
 	public UcenikEntity() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public OdeljenjeEntity getOdeljenjeKojePohadja() {

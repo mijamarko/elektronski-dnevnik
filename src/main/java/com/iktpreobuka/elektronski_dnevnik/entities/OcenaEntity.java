@@ -67,7 +67,6 @@ public class OcenaEntity {
 	
 	public OcenaEntity() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public Integer getId() {

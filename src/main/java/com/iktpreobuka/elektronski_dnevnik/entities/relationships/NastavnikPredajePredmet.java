@@ -40,7 +40,6 @@ public class NastavnikPredajePredmet {
 
 	public NastavnikPredajePredmet() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	

@@ -24,7 +24,6 @@ public class RoditeljEntity extends KorisnikEntity {
 
 	public RoditeljEntity() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public List<UcenikEntity> getDeca() {

@@ -6,7 +6,6 @@ public class UserLoginDTO {
 	private String sifra;
 	public UserLoginDTO() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	public String getEmail() {
 		return email;

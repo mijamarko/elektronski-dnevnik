@@ -33,7 +33,6 @@ public class NastavnikEntity extends KorisnikEntity{
 
 	public NastavnikEntity() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public OdeljenjeEntity getOdeljenje() {

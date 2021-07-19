@@ -46,7 +46,6 @@ public class IzostanakEntity {
 
 	public IzostanakEntity() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public Integer getId() {

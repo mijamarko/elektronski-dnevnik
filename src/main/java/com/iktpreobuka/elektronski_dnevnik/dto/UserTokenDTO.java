@@ -6,7 +6,6 @@ public class UserTokenDTO {
 	private String token;
 	public UserTokenDTO() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	

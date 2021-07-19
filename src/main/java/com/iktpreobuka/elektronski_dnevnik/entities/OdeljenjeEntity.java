@@ -52,7 +52,6 @@ public class OdeljenjeEntity {
 
 	public OdeljenjeEntity() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public Integer getId() {

@@ -66,7 +66,6 @@ public class KorisnikEntity {
 
 	public KorisnikEntity() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public Integer getId() {

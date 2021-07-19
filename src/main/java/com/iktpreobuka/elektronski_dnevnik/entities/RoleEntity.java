@@ -40,7 +40,6 @@ public class RoleEntity {
 
 	public RoleEntity() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public Integer getId() {

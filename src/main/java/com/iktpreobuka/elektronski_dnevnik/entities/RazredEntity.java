@@ -34,7 +34,6 @@ public class RazredEntity {
 
 	public RazredEntity() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public Integer getId() {
