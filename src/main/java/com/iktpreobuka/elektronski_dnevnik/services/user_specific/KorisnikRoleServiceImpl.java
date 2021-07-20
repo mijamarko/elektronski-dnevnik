@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.iktpreobuka.elektronski_dnevnik.dto.KorisnikServiceResponse;
+import com.iktpreobuka.elektronski_dnevnik.dto.responses.KorisnikServiceResponse;
 import com.iktpreobuka.elektronski_dnevnik.entities.KorisnikEntity;
 import com.iktpreobuka.elektronski_dnevnik.entities.RoleEntity;
 import com.iktpreobuka.elektronski_dnevnik.repositories.KorisnikRepository;

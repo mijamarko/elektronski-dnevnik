@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.iktpreobuka.elektronski_dnevnik.controllers.ServiceResponseHandler;
-import com.iktpreobuka.elektronski_dnevnik.dto.KorisnikServiceResponse;
 import com.iktpreobuka.elektronski_dnevnik.dto.UserChangeEmailDTO;
 import com.iktpreobuka.elektronski_dnevnik.dto.UserChangePassDTO;
+import com.iktpreobuka.elektronski_dnevnik.dto.responses.KorisnikServiceResponse;
 import com.iktpreobuka.elektronski_dnevnik.entities.KorisnikEntity;
 import com.iktpreobuka.elektronski_dnevnik.entities.RoleEntity;
 import com.iktpreobuka.elektronski_dnevnik.services.user_specific.KorisnikServiceImpl;

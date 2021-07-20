@@ -1,4 +1,4 @@
-package com.iktpreobuka.elektronski_dnevnik.dto;
+package com.iktpreobuka.elektronski_dnevnik.dto.responses;
 
 import java.util.ArrayList;
 

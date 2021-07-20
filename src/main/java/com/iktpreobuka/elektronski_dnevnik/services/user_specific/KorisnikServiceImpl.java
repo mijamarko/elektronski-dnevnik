@@ -7,9 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.iktpreobuka.elektronski_dnevnik.dto.KorisnikServiceResponse;
 import com.iktpreobuka.elektronski_dnevnik.dto.UserChangeEmailDTO;
 import com.iktpreobuka.elektronski_dnevnik.dto.UserChangePassDTO;
+import com.iktpreobuka.elektronski_dnevnik.dto.responses.KorisnikServiceResponse;
 import com.iktpreobuka.elektronski_dnevnik.entities.KorisnikEntity;
 import com.iktpreobuka.elektronski_dnevnik.entities.RoleEntity;
 import com.iktpreobuka.elektronski_dnevnik.repositories.KorisnikRepository;
