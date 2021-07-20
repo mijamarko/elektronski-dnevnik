@@ -14,5 +14,7 @@ public interface KorisnikRepository extends CrudRepository<KorisnikEntity, Integ
 	
 	@Query("select roles from KorisnikEntity k where k.id=?1")
 	public ArrayList<RoleEntity> findAllByUserId(Integer userId);
+	
+	
 
 }
