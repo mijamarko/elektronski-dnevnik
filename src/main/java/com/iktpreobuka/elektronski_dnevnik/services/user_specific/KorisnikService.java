@@ -1,4 +1,4 @@
-package com.iktpreobuka.elektronski_dnevnik.services;
+package com.iktpreobuka.elektronski_dnevnik.services.user_specific;
 
 import com.iktpreobuka.elektronski_dnevnik.dto.KorisnikServiceResponse;
 import com.iktpreobuka.elektronski_dnevnik.dto.UserChangeEmailDTO;
@@ -7,6 +7,16 @@ import com.iktpreobuka.elektronski_dnevnik.entities.KorisnikEntity;
 import com.iktpreobuka.elektronski_dnevnik.entities.RoleEntity;
 
 public interface KorisnikService {
+	
+	public KorisnikServiceResponse getAllUsers();
+	
+	public KorisnikServiceResponse getAllUsers(RoleEntity role);
+	
+	public KorisnikServiceResponse getAllUsers(Integer role_id);
+	
+	public KorisnikServiceResponse getAllUsers(String role_name);
+	
+	public KorisnikServiceResponse getUserById(Integer id);
 	
 	public KorisnikEntity doesUserExist(Integer id);
 	
@@ -19,17 +29,5 @@ public interface KorisnikService {
 	public KorisnikServiceResponse changePassword(Integer id, UserChangePassDTO newUserData);
 	
 	public KorisnikServiceResponse deleteUser(Integer id);
-	
-	public KorisnikServiceResponse addRoleForUser(Integer id, RoleEntity role);
-	
-	public KorisnikServiceResponse addRoleForUser(Integer id, Integer role_id);
-	
-	public KorisnikServiceResponse addRoleForUser(Integer id, String  role_name);
-	
-	public KorisnikServiceResponse removeRoleFromUser(Integer id, RoleEntity role);
-	
-	public KorisnikServiceResponse removeRoleFromUser(Integer id, Integer role_id);
-	
-	public KorisnikServiceResponse removeRoleFromUser(Integer id, String role_name);
 
 }

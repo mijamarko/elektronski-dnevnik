@@ -132,10 +132,5 @@ public class KorisnikEntity {
 		this.roles = roles;
 	}
 	
-	public void addRole(RoleEntity role) {
-		this.roles.add(role);
-	}
-
-	
 
 }
