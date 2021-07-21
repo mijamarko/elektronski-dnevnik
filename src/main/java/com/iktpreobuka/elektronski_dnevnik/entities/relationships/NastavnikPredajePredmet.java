@@ -50,6 +50,12 @@ public class NastavnikPredajePredmet {
 		this.predmet = predmet;
 		this.ocena = ocena;
 	}
+	
+	public NastavnikPredajePredmet(NastavnikEntity nastavnik, PredmetEntity predmet) {
+		super();
+		this.nastavnik = nastavnik;
+		this.predmet = predmet;
+	}
 
 
 
