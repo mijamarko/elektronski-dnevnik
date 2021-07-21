@@ -22,7 +22,11 @@ public interface NastavnikService {
 	
 	public NastavnikServiceResponse izmeniOdeljenjeKomJeRazredniStaresina(Integer user_id, Integer odeljenje_id);
 	
-	public NastavnikServiceResponse deletePredmetFromNastavnik(Integer user_id, OdeljenjeEntity odeljenje);
+	public NastavnikServiceResponse deletePredmetFromNastavnik(Integer user_id, PredmetEntity predmet);
 
-	public NastavnikServiceResponse deletePredmetFromNastavnik(Integer user_id, Integer odeljenje_id);
+	public NastavnikServiceResponse deletePredmetFromNastavnik(Integer user_id, Integer predmet_id);
+	
+	public NastavnikServiceResponse deleteOdeljenjeFromNastavnik(Integer user_id, OdeljenjeEntity odeljenje);
+	
+	public NastavnikServiceResponse deleteOdeljenjeFromNastavnik(Integer user_id, Integer odeljenje_id);	
 }

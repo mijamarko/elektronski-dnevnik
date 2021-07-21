@@ -27,8 +27,8 @@ public class NastavnikController {
 	 * POST - dodaj novi predmet koji predaje
 	 * POST - dodaj novo odeljenje kom je razredni staresina
 	 * PUT - promeni odeljenje kom je razredni staresina
-	 * TODO DELETE - ukloni predmet koji vise ne predaje
-	 * TODO PUT - ukloni odeljenje kom vise nije razredni staresina
+	 * DELETE - ukloni predmet koji vise ne predaje
+	 * TODO DELETE - ukloni odeljenje kom vise nije razredni staresina
 	 */
 	
 	@Autowired
@@ -87,11 +87,29 @@ public class NastavnikController {
 	
 	@DeleteMapping(path = "/{id}/predmeti")
 	public ResponseEntity<?> deletePredmetFromNastavnik(@PathVariable Integer id, @RequestBody PredmetEntity predmet) {
-		return null;
+		NastavnikServiceResponse response = nastavnikService.deletePredmetFromNastavnik(id, predmet);
+		return serviceResponseHandler.handleResponse(response);
+	}
+	
+	@DeleteMapping(path = "/{id}/predmeti")
+	public ResponseEntity<?> deletePredmetFromNastavnik(@PathVariable Integer id, @RequestBody Integer predmet_id) {
+		NastavnikServiceResponse response = nastavnikService.deletePredmetFromNastavnik(id, predmet_id);
+		return serviceResponseHandler.handleResponse(response);
 	}
 
+	@DeleteMapping(path = "/{id}/odeljenje")
+	public ResponseEntity<?> deleteOdeljenjeFromNastavnik(@PathVariable Integer id, @RequestBody OdeljenjeEntity odeljenje) {
+		NastavnikServiceResponse response = nastavnikService.deleteOdeljenjeFromNastavnik(id, odeljenje);
+		return serviceResponseHandler.handleResponse(response);
+	}
+	
+	@DeleteMapping(path = "/{id}/odeljenje")
+	public ResponseEntity<?> deleteOdeljenjeFromNastavnik(@PathVariable Integer id, @RequestBody Integer odeljenje_id) {
+		NastavnikServiceResponse response = nastavnikService.deleteOdeljenjeFromNastavnik(id, odeljenje_id);
+		return serviceResponseHandler.handleResponse(response);
+	}
 
-
+	
 	
 
 }
