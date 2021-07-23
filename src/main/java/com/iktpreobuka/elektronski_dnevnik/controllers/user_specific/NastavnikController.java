@@ -12,9 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.iktpreobuka.elektronski_dnevnik.controllers.ServiceResponseHandler;
+import com.iktpreobuka.elektronski_dnevnik.dto.KorisnikDTO;
 import com.iktpreobuka.elektronski_dnevnik.dto.responses.NastavnikServiceResponse;
-import com.iktpreobuka.elektronski_dnevnik.entities.OdeljenjeEntity;
-import com.iktpreobuka.elektronski_dnevnik.entities.PredmetEntity;
 import com.iktpreobuka.elektronski_dnevnik.services.user_specific.NastavnikServiceImpl;
 
 @RestController
@@ -28,7 +27,7 @@ public class NastavnikController {
 	 * POST - dodaj novo odeljenje kom je razredni staresina
 	 * PUT - promeni odeljenje kom je razredni staresina
 	 * DELETE - ukloni predmet koji vise ne predaje
-	 * TODO DELETE - ukloni odeljenje kom vise nije razredni staresina
+	 * DELETE - ukloni odeljenje kom vise nije razredni staresina
 	 */
 	
 	@Autowired
@@ -38,77 +37,40 @@ public class NastavnikController {
 	private ServiceResponseHandler serviceResponseHandler;
 	
 	@GetMapping(path = "/{id}/predmeti")
-	public ResponseEntity<?> getAllPredmetiOvogNastavnika(@PathVariable Integer id) {
-		NastavnikServiceResponse response = nastavnikService.getAllPredmetiOvogNastavnika(id);
+	public ResponseEntity<?> dobaviSvePredmeteOvogNastavnika(@PathVariable Integer id) {
+		NastavnikServiceResponse response = nastavnikService.dobaviSvePredmeteOvogNastavnika(id);
 		return serviceResponseHandler.handleResponse(response);
 	}
 	
 	@PostMapping(path = "/{id}/predmeti")
-	public ResponseEntity<?> addNewPredmet(@RequestBody PredmetEntity predmet, @PathVariable Integer id) {
-		NastavnikServiceResponse response = nastavnikService.addNewPredmet(id, predmet);
-		return serviceResponseHandler.handleResponse(response);
-	}
-	
-	@PostMapping(path = "/{id}/predmeti")
-	public ResponseEntity<?> addNewPredmet(@RequestBody Integer predmet_id, @PathVariable Integer id) {
-		NastavnikServiceResponse response = nastavnikService.addNewPredmet(id, predmet_id);
-		return serviceResponseHandler.handleResponse(response);
-	}
-	
-	@PostMapping(path = "/{id}/predmeti")
-	public ResponseEntity<?> addNewPredmet(@RequestBody String predmet_name, @PathVariable Integer id) {
-		NastavnikServiceResponse response = nastavnikService.addNewPredmet(id, predmet_name);
-		return serviceResponseHandler.handleResponse(response);
-	}
-
-	@PostMapping(path = "/{id}/odeljenje")
-	public ResponseEntity<?> addNewOdeljenje(@RequestBody OdeljenjeEntity odeljenje, @PathVariable Integer id) {
-		NastavnikServiceResponse response = nastavnikService.addNewOdeljenje(id, odeljenje);
+	public ResponseEntity<?> dodajNoviPredmetNastavniku(@PathVariable Integer id, @RequestBody KorisnikDTO req) {
+		NastavnikServiceResponse response = nastavnikService.dodajNoviPredmetNastavniku(id, req);
 		return serviceResponseHandler.handleResponse(response);
 	}
 	
 	@PostMapping(path = "/{id}/odeljenje")
-	public ResponseEntity<?> addNewOdeljenje(@RequestBody Integer odeljenje_id, @PathVariable Integer id) {
-		NastavnikServiceResponse response = nastavnikService.addNewOdeljenje(id, odeljenje_id);
+	public ResponseEntity<?> dodajNovoOdeljenjeNastavniku(@PathVariable Integer id, @RequestBody KorisnikDTO req) {
+		NastavnikServiceResponse response = nastavnikService.dodajNovoOdeljenjeNastavniku(id, req);
 		return serviceResponseHandler.handleResponse(response);
 	}
 	
 	@PutMapping(path = "/{id}/odeljenje")
-	public ResponseEntity<?> izmeniOdeljenjeKomJeRazredniStaresina(@PathVariable Integer id, @RequestBody OdeljenjeEntity odeljenje) {
-		NastavnikServiceResponse response = nastavnikService.izmeniOdeljenjeKomJeRazredniStaresina(id, odeljenje);
-		return serviceResponseHandler.handleResponse(response);
-	}
-	
-	@PutMapping(path = "/{id}/odeljenje")
-	public ResponseEntity<?> izmeniOdeljenjeKomJeRazredniStaresina(@PathVariable Integer id, @RequestBody Integer odeljenje_id) {
-		NastavnikServiceResponse response = nastavnikService.izmeniOdeljenjeKomJeRazredniStaresina(id, odeljenje_id);
+	public ResponseEntity<?> izmeniOdeljenjeKomJeRazredniStaresina(@PathVariable Integer id, @RequestBody KorisnikDTO req) {
+		NastavnikServiceResponse response = nastavnikService.izmeniOdeljenjeKomJeRazredniStaresina(id, req);
 		return serviceResponseHandler.handleResponse(response);
 	}
 	
 	@DeleteMapping(path = "/{id}/predmeti")
-	public ResponseEntity<?> deletePredmetFromNastavnik(@PathVariable Integer id, @RequestBody PredmetEntity predmet) {
-		NastavnikServiceResponse response = nastavnikService.deletePredmetFromNastavnik(id, predmet);
-		return serviceResponseHandler.handleResponse(response);
-	}
-	
-	@DeleteMapping(path = "/{id}/predmeti")
-	public ResponseEntity<?> deletePredmetFromNastavnik(@PathVariable Integer id, @RequestBody Integer predmet_id) {
-		NastavnikServiceResponse response = nastavnikService.deletePredmetFromNastavnik(id, predmet_id);
+	public ResponseEntity<?> obrisiPredmetNastavniku(@PathVariable Integer id, @RequestBody KorisnikDTO req) {
+		NastavnikServiceResponse response = nastavnikService.obrisiPredmetNastavniku(id, req);
 		return serviceResponseHandler.handleResponse(response);
 	}
 
 	@DeleteMapping(path = "/{id}/odeljenje")
-	public ResponseEntity<?> deleteOdeljenjeFromNastavnik(@PathVariable Integer id, @RequestBody OdeljenjeEntity odeljenje) {
-		NastavnikServiceResponse response = nastavnikService.deleteOdeljenjeFromNastavnik(id, odeljenje);
+	public ResponseEntity<?> obrisiOdeljenjeNastavniku(@PathVariable Integer id, @RequestBody KorisnikDTO req) {
+		NastavnikServiceResponse response = nastavnikService.obrisiOdeljenjeNastavniku(id, req);
 		return serviceResponseHandler.handleResponse(response);
 	}
-	
-	@DeleteMapping(path = "/{id}/odeljenje")
-	public ResponseEntity<?> deleteOdeljenjeFromNastavnik(@PathVariable Integer id, @RequestBody Integer odeljenje_id) {
-		NastavnikServiceResponse response = nastavnikService.deleteOdeljenjeFromNastavnik(id, odeljenje_id);
-		return serviceResponseHandler.handleResponse(response);
-	}
-
 	
 	
 

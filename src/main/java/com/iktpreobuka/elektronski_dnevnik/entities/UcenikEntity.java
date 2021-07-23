@@ -68,6 +68,14 @@ public class UcenikEntity extends KorisnikEntity {
 	public void setRoditelji(List<RoditeljEntity> roditelji) {
 		this.roditelji = roditelji;
 	}
+
+	public List<OcenaEntity> getOcene() {
+		return ocene;
+	}
+
+	public void setOcene(List<OcenaEntity> ocene) {
+		this.ocene = ocene;
+	}
 	
 	
 

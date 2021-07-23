@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,16 +22,13 @@ import io.jsonwebtoken.Jwts;
 public class JWTAuthorizationFilter extends OncePerRequestFilter{
 	
 	
-	
-	public JWTAuthorizationFilter(String secretKey) {
+	private String securityKey;
+	public JWTAuthorizationFilter(String securityKey) {
 		super();
-		this.secretKey = secretKey;
+		this.securityKey = securityKey;		
 	}
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-	
-	@Value("$spring.security.secret-key")
-	private String secretKey;
 	
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -54,6 +50,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter{
 			logger.error("Token does not exist");
 			SecurityContextHolder.clearContext();
 		}
+		filterChain.doFilter(request, response);
 	}
 	
 	private boolean checkJWT(HttpServletRequest request) {
@@ -68,7 +65,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter{
 	
 	private Claims validateToken(HttpServletRequest request) {
 		String jwt = request.getHeader("Authorization").replace("Bearer ", "");
-		return Jwts.parser().setSigningKey(this.secretKey).parseClaimsJws(jwt).getBody();
+		return Jwts.parser().setSigningKey(this.securityKey).parseClaimsJws(jwt).getBody();
 	}
 	
 	private void setUpSpringAuthentication(Claims claims) {

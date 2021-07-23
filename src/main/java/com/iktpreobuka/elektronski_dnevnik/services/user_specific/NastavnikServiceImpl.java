@@ -6,14 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.iktpreobuka.elektronski_dnevnik.dto.KorisnikDTO;
 import com.iktpreobuka.elektronski_dnevnik.dto.responses.NastavnikServiceResponse;
 import com.iktpreobuka.elektronski_dnevnik.entities.NastavnikEntity;
 import com.iktpreobuka.elektronski_dnevnik.entities.OdeljenjeEntity;
 import com.iktpreobuka.elektronski_dnevnik.entities.PredmetEntity;
 import com.iktpreobuka.elektronski_dnevnik.entities.relationships.NastavnikPredajePredmet;
 import com.iktpreobuka.elektronski_dnevnik.repositories.NastavnikRepository;
-import com.iktpreobuka.elektronski_dnevnik.repositories.OdeljenjeRepository;
-import com.iktpreobuka.elektronski_dnevnik.repositories.PredmetRepository;
+import com.iktpreobuka.elektronski_dnevnik.services.OdeljenjeServiceImpl;
+import com.iktpreobuka.elektronski_dnevnik.services.PredmetServiceImpl;
 
 @Service
 public class NastavnikServiceImpl implements NastavnikService {
@@ -22,18 +23,18 @@ public class NastavnikServiceImpl implements NastavnikService {
 	private KorisnikServiceImpl korisnikService;
 
 	@Autowired
+	private PredmetServiceImpl predmetService;
+
+	@Autowired
+	private OdeljenjeServiceImpl odeljenjeService;
+
+	@Autowired
 	private NastavnikRepository nastavnikRepository;
 
-	@Autowired
-	private PredmetRepository predmetRepository;
-
-	@Autowired
-	private OdeljenjeRepository odeljenjeRepository;
-
-	public NastavnikEntity isUserNastavnik(Integer user_id) {
+	public NastavnikEntity korisnikJeNastavnik(Integer userId) {
 		NastavnikEntity nastavnik;
 		try {
-			nastavnik = (NastavnikEntity) korisnikService.doesUserExist(user_id);
+			nastavnik = (NastavnikEntity) korisnikService.korisnikPostoji(userId);
 		} catch (ClassCastException e) {
 			e.getMessage();
 			e.printStackTrace();
@@ -43,259 +44,130 @@ public class NastavnikServiceImpl implements NastavnikService {
 	}
 
 	@Override
-	public NastavnikServiceResponse getAllPredmetiOvogNastavnika(Integer id) {
-		if (!isUserNastavnik(id).equals(null)) {
-			NastavnikEntity nastavnik = isUserNastavnik(id);
+	public NastavnikServiceResponse dobaviSvePredmeteOvogNastavnika(Integer id) {
+		if (!korisnikJeNastavnik(id).equals(null)) {
+			NastavnikEntity nastavnik = korisnikJeNastavnik(id);
 			ArrayList<PredmetEntity> predmeti = new ArrayList<PredmetEntity>();
 			nastavnik.getPredmetiKojePredaje().forEach(predmet -> {
 				predmeti.add(predmet.getPredmet());
 			});
 			if (predmeti.size() > 0) {
-				return new NastavnikServiceResponse(HttpStatus.OK, "", "Predmeti ovog nastavnika", predmeti,
-						(OdeljenjeEntity) null);
+				return new NastavnikServiceResponse(HttpStatus.OK, "Predmeti ovog nastavnika", predmeti);
 			}
-			return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "K:N-2", "Nastavnik ne predaje nijedan predmet",
-					(PredmetEntity) null, (OdeljenjeEntity) null);
+			return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "K:N-2",
+					"Nastavnik ne predaje nijedan predmet");
 		}
-		return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "K:N-1", "Korisnik nije nastavnik",
-				(PredmetEntity) null, (OdeljenjeEntity) null);
+		return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "K:N-1", "Korisnik nije nastavnik");
 
 	}
 
 	@Override
-	public NastavnikServiceResponse addNewPredmet(Integer user_id, PredmetEntity predmet) {
-		if (!isUserNastavnik(user_id).equals(null)) {
-			NastavnikEntity nastavnik = isUserNastavnik(user_id);
-			ArrayList<PredmetEntity> predmeti = new ArrayList<PredmetEntity>();
-			nastavnik.getPredmetiKojePredaje().forEach(p -> {
-				predmeti.add(p.getPredmet());
-			});
-			if (predmeti.contains(predmet)) {
-				return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "K:N-2",
-						"Nastavnik vec predaje ovaj predmet", (PredmetEntity) null, (OdeljenjeEntity) null);
-			}
-			nastavnik.getPredmetiKojePredaje().add(new NastavnikPredajePredmet(nastavnik, predmet));
-			nastavnikRepository.save(nastavnik);
-			return new NastavnikServiceResponse(HttpStatus.OK, "", "Predmet uspesno dodat", predmet,
-					(OdeljenjeEntity) null);
+	public NastavnikServiceResponse dodajNoviPredmetNastavniku(Integer userId, KorisnikDTO req) {
+		if (req.getPredmetId().equals(null) && req.getPredmetName().equals(null)) {
+			return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "G-1", "Lose formiran zahtev");
 		}
-		return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "K:N-1", "Korisnik nije nastavnik",
-				(PredmetEntity) null, (OdeljenjeEntity) null);
-	}
-
-	@Override
-	public NastavnikServiceResponse addNewPredmet(Integer user_id, Integer predmet_id) {
-		if (!isUserNastavnik(user_id).equals(null)) {
-			NastavnikEntity nastavnik = isUserNastavnik(user_id);
-			PredmetEntity predmet = predmetRepository.findById(predmet_id).get();
-			if (!predmet.equals(null)) {
-				ArrayList<PredmetEntity> predmeti = new ArrayList<PredmetEntity>();
+		if (!korisnikJeNastavnik(userId).equals(null)) {
+			if (!predmetService.predmetPostoji(req).equals(null)) {
+				PredmetEntity predmet = predmetService.predmetPostoji(req);
+				ArrayList<PredmetEntity> predmetiKojePredaje = new ArrayList<PredmetEntity>();
+				NastavnikEntity nastavnik = korisnikJeNastavnik(userId);
 				nastavnik.getPredmetiKojePredaje().forEach(p -> {
-					predmeti.add(p.getPredmet());
+					predmetiKojePredaje.add(p.getPredmet());
 				});
-				if (predmeti.contains(predmet)) {
-					return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "K:N-2",
-							"Nastavnik vec predaje ovaj predmet", (PredmetEntity) null, (OdeljenjeEntity) null);
+				if (predmetiKojePredaje.contains(predmet)) {
+					return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "K:N-3",
+							"Nastavnik vec predaje ovaj predmet");
 				}
 				nastavnik.getPredmetiKojePredaje().add(new NastavnikPredajePredmet(nastavnik, predmet));
 				nastavnikRepository.save(nastavnik);
-				return new NastavnikServiceResponse(HttpStatus.OK, "", "Predmet uspesno dodat", predmet,
-						(OdeljenjeEntity) null);
+				return new NastavnikServiceResponse(HttpStatus.OK, "Predmet uspesno dodat", predmet);
 			}
-			return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "P - 1", "Predmet ne postoji",
-					(PredmetEntity) null, (OdeljenjeEntity) null);
+			return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "P-1", "Predmet ne postoji");
 		}
-		return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "K:N-1", "Korisnik nije nastavnik",
-				(PredmetEntity) null, (OdeljenjeEntity) null);
+		return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "K:N-1", "Korisnik nije nastavnik");
 	}
 
 	@Override
-	public NastavnikServiceResponse addNewPredmet(Integer user_id, String predmet_name) {
-		if (!isUserNastavnik(user_id).equals(null)) {
-			NastavnikEntity nastavnik = isUserNastavnik(user_id);
-			PredmetEntity predmet = predmetRepository.findByName(predmet_name);
-			if (!predmet.equals(null)) {
-				ArrayList<PredmetEntity> predmeti = new ArrayList<PredmetEntity>();
+	public NastavnikServiceResponse dodajNovoOdeljenjeNastavniku(Integer userId, KorisnikDTO req) {
+		if (req.getOdeljenjeId().equals(null)) {
+			return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "G-1", "Lose formiran zahtev");
+		}
+		if (!korisnikJeNastavnik(userId).equals(null)) {
+			if (odeljenjeService.odeljenjePostoji(req).getOdeljenje().equals(null)) {
+				return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "O -1", "Odeljenje ne postoji");
+			}
+			NastavnikEntity nastavnik = korisnikJeNastavnik(userId);
+			if (nastavnik.getOdeljenje().equals(null)) {
+				return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "K:N-3",
+						"Nastavnik je vec razredni staresina");
+			}
+			OdeljenjeEntity odeljenje = odeljenjeService.odeljenjePostoji(req).getOdeljenje();
+			nastavnik.setOdeljenje(odeljenje);
+			return new NastavnikServiceResponse(HttpStatus.OK, "Odeljenje uspesno dodato", odeljenje);
+		}
+		return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "K:N-1", "Korisnik nije nastavnik");
+	}
+
+	@Override
+	public NastavnikServiceResponse izmeniOdeljenjeKomJeRazredniStaresina(Integer userId, KorisnikDTO req) {
+		if (req.getOdeljenjeId().equals(null)) {
+			return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "G-1", "Lose formiran zahtev");
+		}
+		if (!korisnikJeNastavnik(userId).equals(null)) {
+			if (odeljenjeService.odeljenjePostoji(req).getOdeljenje().equals(null)) {
+				return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "O -1", "Odeljenje ne postoji");
+			}
+			NastavnikEntity nastavnik = korisnikJeNastavnik(userId);
+			OdeljenjeEntity odeljenje = odeljenjeService.odeljenjePostoji(req).getOdeljenje();
+			nastavnik.setOdeljenje(odeljenje);
+			return new NastavnikServiceResponse(HttpStatus.OK, "Odeljenje uspesno izmenjeno", odeljenje);
+		}
+		return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "K:N-1", "Korisnik nije nastavnik");
+	}
+
+	@Override
+	public NastavnikServiceResponse obrisiPredmetNastavniku(Integer userId, KorisnikDTO req) {
+		if (req.getPredmetId().equals(null) && req.getPredmetName().equals(null)) {
+			return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "G-1", "Lose formiran zahtev");
+		}
+		if (!korisnikJeNastavnik(userId).equals(null)) {
+			if (!predmetService.predmetPostoji(req).equals(null)) {
+				PredmetEntity predmet = predmetService.predmetPostoji(req);
+				ArrayList<PredmetEntity> predmetiKojePredaje = new ArrayList<PredmetEntity>();
+				NastavnikEntity nastavnik = korisnikJeNastavnik(userId);
 				nastavnik.getPredmetiKojePredaje().forEach(p -> {
-					predmeti.add(p.getPredmet());
+					predmetiKojePredaje.add(p.getPredmet());
 				});
-				if (predmeti.contains(predmet)) {
-					return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "K:N-2",
-							"Nastavnik vec predaje ovaj predmet", (PredmetEntity) null, (OdeljenjeEntity) null);
-				}
-				nastavnik.getPredmetiKojePredaje().add(new NastavnikPredajePredmet(nastavnik, predmet));
-				nastavnikRepository.save(nastavnik);
-				return new NastavnikServiceResponse(HttpStatus.OK, "", "Predmet uspesno dodat", predmet,
-						(OdeljenjeEntity) null);
-			}
-			return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "P - 1", "Predmet ne postoji",
-					(PredmetEntity) null, (OdeljenjeEntity) null);
-		}
-		return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "K:N-1", "Korisnik nije nastavnik",
-				(PredmetEntity) null, (OdeljenjeEntity) null);
-	}
-
-	@Override
-	public NastavnikServiceResponse addNewOdeljenje(Integer user_id, OdeljenjeEntity odeljenje) {
-		if (!isUserNastavnik(user_id).equals(null)) {
-			NastavnikEntity nastavnik = isUserNastavnik(user_id);
-			OdeljenjeEntity odeljenjeKomPredaje = nastavnik.getOdeljenje();
-			if (odeljenjeKomPredaje.equals(null)) {
-				if (!odeljenjeRepository.findById(odeljenje.getId()).get().equals(null)) {
-					nastavnik.setOdeljenje(odeljenje);
+				if (predmetiKojePredaje.contains(predmet)) {
+					nastavnik.getPredmetiKojePredaje().forEach(p -> {
+						if (p.getPredmet().equals(predmet)) {
+							nastavnik.getPredmetiKojePredaje().remove(p);
+						}
+					});
 					nastavnikRepository.save(nastavnik);
-					return new NastavnikServiceResponse(HttpStatus.OK, "", "Odeljenje uspesno dodato",
-							(PredmetEntity) null, odeljenje);
+					return new NastavnikServiceResponse(HttpStatus.OK, "Predmet uspesno obrisan", predmet);
 				}
-				return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "O-1", "Odeljenje ne postoji",
-						(PredmetEntity) null, (OdeljenjeEntity) null);
+				return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "K:N-4",
+						"Nastavnik ne predaje ovaj predmet");
 			}
-			return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "K:N-3", "Nastavnik je vec razredni staresina",
-					(PredmetEntity) null, (OdeljenjeEntity) null);
+			return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "P-1", "Predmet ne postoji");
 		}
-		return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "K:N-1", "Korisnik nije nastavnik",
-				(PredmetEntity) null, (OdeljenjeEntity) null);
+		return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "K:N-1", "Korisnik nije nastavnik");
 	}
 
-	@Override
-	public NastavnikServiceResponse addNewOdeljenje(Integer user_id, Integer odeljenje_id) {
-		if (!isUserNastavnik(user_id).equals(null)) {
-			NastavnikEntity nastavnik = isUserNastavnik(user_id);
-			OdeljenjeEntity odeljenjeKomPredaje = nastavnik.getOdeljenje();
-			if (odeljenjeKomPredaje.equals(null)) {
-				if (!odeljenjeRepository.findById(odeljenje_id).get().equals(null)) {
-					OdeljenjeEntity novoOdeljenje = (odeljenjeRepository.findById(odeljenje_id).get());
-					nastavnik.setOdeljenje(novoOdeljenje);
-					nastavnikRepository.save(nastavnik);
-					return new NastavnikServiceResponse(HttpStatus.OK, "", "Odeljenje uspesno dodato",
-							(PredmetEntity) null, novoOdeljenje);
-				}
-				return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "O -1", "Odeljenje ne postoji",
-						(PredmetEntity) null, (OdeljenjeEntity) null);
-			}
-			return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "K:N-3", "Nastavnik je vec razredni staresina",
-					(PredmetEntity) null, (OdeljenjeEntity) null);
+	public NastavnikServiceResponse obrisiOdeljenjeNastavniku(Integer userId, KorisnikDTO req) {
+		if (req.getOdeljenjeId().equals(null)) {
+			return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "G-1", "Lose formiran zahtev");
 		}
-		return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "K:N-1", "Korisnik nije nastavnik",
-				(PredmetEntity) null, (OdeljenjeEntity) null);
-	}
-
-	@Override
-	public NastavnikServiceResponse izmeniOdeljenjeKomJeRazredniStaresina(Integer user_id, OdeljenjeEntity odeljenje) {
-		if (!isUserNastavnik(user_id).equals(null)) {
-			NastavnikEntity nastavnik = isUserNastavnik(user_id);
-			if (!odeljenjeRepository.findById(odeljenje.getId()).get().equals(null)) {
-				nastavnik.setOdeljenje(odeljenje);
-				nastavnikRepository.save(nastavnik);
-				return new NastavnikServiceResponse(HttpStatus.OK, "", "Odeljenje uspesno promenjeno",
-						(PredmetEntity) null, odeljenje);
+		if (!korisnikJeNastavnik(userId).equals(null)) {
+			if (odeljenjeService.odeljenjePostoji(req).getOdeljenje().equals(null)) {
+				return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "O -1", "Odeljenje ne postoji");
 			}
-			return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "O -1", "Odeljenje ne postoji",
-					(PredmetEntity) null, (OdeljenjeEntity) null);
+			NastavnikEntity nastavnik = korisnikJeNastavnik(userId);
+			nastavnik.setOdeljenje(null);
+			return new NastavnikServiceResponse(HttpStatus.OK, "Odeljenje uspesno obrisano");
 		}
-		return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "K:N-1", "Korisnik nije nastavnik",
-				(PredmetEntity) null, (OdeljenjeEntity) null);
+		return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "K:N-1", "Korisnik nije nastavnik");
 	}
-
-	@Override
-	public NastavnikServiceResponse izmeniOdeljenjeKomJeRazredniStaresina(Integer user_id, Integer odeljenje_id) {
-		if (!isUserNastavnik(user_id).equals(null)) {
-			NastavnikEntity nastavnik = isUserNastavnik(user_id);
-			if (!odeljenjeRepository.findById(odeljenje_id).equals(null)) {
-				OdeljenjeEntity odeljenje = odeljenjeRepository.findById(odeljenje_id).get();
-				nastavnik.setOdeljenje(odeljenje);
-				nastavnikRepository.save(nastavnik);
-				return new NastavnikServiceResponse(HttpStatus.OK, "", "Odeljenje uspesno promenjeno",
-						(PredmetEntity) null, odeljenje);
-			}
-			return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "O -1", "Odeljenje ne postoji",
-					(PredmetEntity) null, (OdeljenjeEntity) null);
-		}
-		return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "K:N-1", "Korisnik nije nastavnik",
-				(PredmetEntity) null, (OdeljenjeEntity) null);
-	}
-
-	@Override
-	public NastavnikServiceResponse deletePredmetFromNastavnik(Integer user_id, PredmetEntity predmet) {
-		if (!isUserNastavnik(user_id).equals(null)) {
-			NastavnikEntity nastavnik = isUserNastavnik(user_id);
-			if(!predmetRepository.findByName(predmet.getNazivPredmeta()).equals(null)) {
-				nastavnik.getPredmetiKojePredaje().forEach(p -> {
-					if(p.getPredmet().equals(predmet)) {
-						nastavnik.getPredmetiKojePredaje().remove(p);
-						nastavnikRepository.save(nastavnik);
-					}
-				});
-				return new NastavnikServiceResponse(HttpStatus.OK, "", "Predmet uspesno obrisan",
-						 predmet, (OdeljenjeEntity) null);
-			}
-			return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "P - 1", "Predmet ne postoji",
-					(PredmetEntity) null, (OdeljenjeEntity) null);
-		}
-		return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "K:N-1", "Korisnik nije nastavnik",
-				(PredmetEntity) null, (OdeljenjeEntity) null);
-	}
-
-	@Override
-	public NastavnikServiceResponse deletePredmetFromNastavnik(Integer user_id, Integer predmet_id) {
-		if (!isUserNastavnik(user_id).equals(null)) {
-			NastavnikEntity nastavnik = isUserNastavnik(user_id);
-			if(!predmetRepository.findById(predmet_id).equals(null)) {
-				PredmetEntity predmet = predmetRepository.findById(predmet_id).get();
-				nastavnik.getPredmetiKojePredaje().forEach(p -> {
-					if(p.getPredmet().equals(predmet)) {
-						nastavnik.getPredmetiKojePredaje().remove(p);
-						nastavnikRepository.save(nastavnik);
-					}
-				});
-				return new NastavnikServiceResponse(HttpStatus.OK, "", "Predmet uspesno obrisan",
-						 predmet, (OdeljenjeEntity) null);
-			}
-			return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "P - 1", "Predmet ne postoji",
-					(PredmetEntity) null, (OdeljenjeEntity) null);
-		}
-		return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "K:N-1", "Korisnik nije nastavnik",
-				(PredmetEntity) null, (OdeljenjeEntity) null);
-	}
-	
-	public NastavnikServiceResponse deleteOdeljenjeFromNastavnik(Integer user_id, OdeljenjeEntity odeljenje) {
-		if (!isUserNastavnik(user_id).equals(null)) {
-			NastavnikEntity nastavnik = isUserNastavnik(user_id);
-			if(!odeljenjeRepository.findById(odeljenje.getId()).get().equals(null)) {
-				if(nastavnik.getOdeljenje().equals(odeljenje)) {
-					nastavnik.setOdeljenje(null);
-					nastavnikRepository.save(nastavnik);
-					return new NastavnikServiceResponse(HttpStatus.OK, "", "Odeljenje obrisano", (PredmetEntity) null, odeljenje);
-				}
-				return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "K:N-4", "Nastavnik nije razredni staresina specificiranom odeljenju", (PredmetEntity) null, (OdeljenjeEntity) null);
-			}
-			return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "O-1", "Odeljenje ne postoji",
-					(PredmetEntity) null, (OdeljenjeEntity) null);
-		}
-		return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "K:N-1", "Korisnik nije nastavnik",
-				(PredmetEntity) null, (OdeljenjeEntity) null);
-	}
-
-	@Override
-	public NastavnikServiceResponse deleteOdeljenjeFromNastavnik(Integer user_id, Integer odeljenje_id) {
-		if (!isUserNastavnik(user_id).equals(null)) {
-			NastavnikEntity nastavnik = isUserNastavnik(user_id);
-			if(!odeljenjeRepository.findById(odeljenje_id).get().equals(null)) {
-				OdeljenjeEntity odeljenje = odeljenjeRepository.findById(odeljenje_id).get();
-				if(nastavnik.getOdeljenje().equals(odeljenje)) {
-					nastavnik.setOdeljenje(null);
-					nastavnikRepository.save(nastavnik);
-					return new NastavnikServiceResponse(HttpStatus.OK, "", "Odeljenje obrisano", (PredmetEntity) null, odeljenje);
-				}
-				return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "K:N-4", "Nastavnik nije razredni staresina specificiranom odeljenju", (PredmetEntity) null, (OdeljenjeEntity) null);
-			}
-			return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "O-1", "Odeljenje ne postoji",
-					(PredmetEntity) null, (OdeljenjeEntity) null);
-		}
-		return new NastavnikServiceResponse(HttpStatus.BAD_REQUEST, "K:N-1", "Korisnik nije nastavnik",
-				(PredmetEntity) null, (OdeljenjeEntity) null);
-	}
-	
-	
 
 }

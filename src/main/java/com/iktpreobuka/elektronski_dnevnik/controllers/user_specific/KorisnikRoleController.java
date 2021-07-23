@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.iktpreobuka.elektronski_dnevnik.controllers.ServiceResponseHandler;
+import com.iktpreobuka.elektronski_dnevnik.dto.KorisnikDTO;
 import com.iktpreobuka.elektronski_dnevnik.dto.responses.KorisnikServiceResponse;
 import com.iktpreobuka.elektronski_dnevnik.entities.RoleEntity;
 import com.iktpreobuka.elektronski_dnevnik.repositories.KorisnikRepository;
@@ -49,38 +50,14 @@ public class KorisnikRoleController {
 	}
 	
 	@PostMapping(value = "/{id}/add")
-	public ResponseEntity<?> addRoleForUser(@PathVariable Integer id, @RequestBody RoleEntity role) {
-		KorisnikServiceResponse korisnik = korisnikRoleService.addRoleForUser(id, role);
-		return serviceResponseHandler.handleResponse(korisnik);
-	}
-	
-	@PostMapping(value = "/{id}/add")
-	public ResponseEntity<?> addRoleForUser(@PathVariable Integer id, @RequestBody Integer role_id) {
-		KorisnikServiceResponse korisnik = korisnikRoleService.addRoleForUser(id, role_id);
-		return serviceResponseHandler.handleResponse(korisnik);
-	}
-	
-	@PostMapping(value = "/{id}/add")
-	public ResponseEntity<?> addRoleForUser(@PathVariable Integer id, @RequestBody String role_name) {
-		KorisnikServiceResponse korisnik = korisnikRoleService.addRoleForUser(id, role_name);
+	public ResponseEntity<?> addRoleForUser(@PathVariable Integer id, @RequestBody KorisnikDTO req) {
+		KorisnikServiceResponse korisnik = korisnikRoleService.dodajRoluKorisniku(id, req);
 		return serviceResponseHandler.handleResponse(korisnik);
 	}
 	
 	@PutMapping(value = "/{id}/remove")
-	public ResponseEntity<?> removeRoleFromUser(@PathVariable Integer id, @RequestBody RoleEntity role) {
-		KorisnikServiceResponse korisnik = korisnikRoleService.removeRoleFromUser(id, role);
-		return serviceResponseHandler.handleResponse(korisnik);
-	}
-	
-	@PutMapping(value = "/{id}/remove")
-	public ResponseEntity<?> removeRoleFromUser(@PathVariable Integer id, @RequestBody Integer role_id) {
-		KorisnikServiceResponse korisnik = korisnikRoleService.removeRoleFromUser(id, role_id);
-		return serviceResponseHandler.handleResponse(korisnik);
-	}
-	
-	@PutMapping(value = "/{id}/remove")
-	public ResponseEntity<?> removeRoleFromUser(@PathVariable Integer id, @RequestBody String role_name) {
-		KorisnikServiceResponse korisnik = korisnikRoleService.removeRoleFromUser(id, role_name);
+	public ResponseEntity<?> removeRoleFromUser(@PathVariable Integer id, @RequestBody KorisnikDTO req) {
+		KorisnikServiceResponse korisnik = korisnikRoleService.obrisiRoluKorisniku(id, req);
 		return serviceResponseHandler.handleResponse(korisnik);
 	}
 

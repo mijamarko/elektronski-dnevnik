@@ -124,6 +124,14 @@ public class OcenaEntity {
 	public void setPolugodiste(EPolugodiste polugodiste) {
 		this.polugodiste = polugodiste;
 	}
-	
 
+	public NastavnikPredajePredmet getNastavnikPredmet() {
+		return nastavnikPredmet;
+	}
+
+	public void setNastavnikPredmet(NastavnikPredajePredmet nastavnikPredmet) {
+		this.nastavnikPredmet = nastavnikPredmet;
+	}
+	
+	
 }

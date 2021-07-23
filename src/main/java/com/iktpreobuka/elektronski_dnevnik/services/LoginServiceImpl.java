@@ -11,7 +11,6 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Service;
 
 import com.iktpreobuka.elektronski_dnevnik.entities.KorisnikEntity;
-import com.iktpreobuka.elektronski_dnevnik.entities.RoleEntity;
 import com.iktpreobuka.elektronski_dnevnik.repositories.KorisnikRepository;
 
 import io.jsonwebtoken.Jwts;
@@ -26,11 +25,15 @@ public class LoginServiceImpl implements LoginService {
 	@Override
 	public String getJWT(KorisnikEntity korisnik, String secretKey, Integer tokenDuration) {
 		//get all roles for specified id
-		ArrayList<RoleEntity> roles = korisnikRepository.findAllByUserId(korisnik.getId());
+		ArrayList<String> roles = new ArrayList<String>(); 
+				
+		korisnikRepository.findById(korisnik.getId()).get().getRoles().forEach(r -> {
+			roles.add(r.getName());
+		});
 		
 		//najponosniji na ovo ikada
 		List<GrantedAuthority> grantedAuthority = AuthorityUtils.commaSeparatedStringToAuthorityList(roles
-				.stream().map(RoleEntity::getName)
+				.stream()
 				.reduce("", (a,b) -> a + " " + b + ",")
 				.transform(s -> s.substring(0, s.length()-1)));
 		

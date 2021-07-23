@@ -18,7 +18,7 @@ public class ServiceResponseHandler {
 		if(response.getHttpResponseCode().equals(HttpStatus.OK)) {
 			return new ResponseEntity<Iterable<KorisnikEntity>>(response.getKorisnici(), response.getHttpResponseCode());
 		}
-		return new ResponseEntity<RestError>(new RestError(response.getCode(), response.getMessage()), response.getHttpResponseCode());
+		return new ResponseEntity<RestError>(new RestError(response.getKod(), response.getPoruka()), response.getHttpResponseCode());
 	}
 	
 	
@@ -29,7 +29,7 @@ public class ServiceResponseHandler {
 			}
 			return new ResponseEntity<OdeljenjeEntity>(response.getOdeljenje(), response.getHttpResponseCode());
 		}
-		return new ResponseEntity<RestError>(new RestError(response.getCode(), response.getMessage()), response.getHttpResponseCode());
+		return new ResponseEntity<RestError>(new RestError(response.getKod(), response.getPoruka()), response.getHttpResponseCode());
 	}
 
 }

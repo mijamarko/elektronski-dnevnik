@@ -15,16 +15,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.iktpreobuka.elektronski_dnevnik.controllers.ServiceResponseHandler;
-import com.iktpreobuka.elektronski_dnevnik.dto.UserChangeEmailDTO;
-import com.iktpreobuka.elektronski_dnevnik.dto.UserChangePassDTO;
+import com.iktpreobuka.elektronski_dnevnik.dto.KorisnikDTO;
 import com.iktpreobuka.elektronski_dnevnik.dto.responses.KorisnikServiceResponse;
 import com.iktpreobuka.elektronski_dnevnik.entities.KorisnikEntity;
-import com.iktpreobuka.elektronski_dnevnik.entities.RoleEntity;
 import com.iktpreobuka.elektronski_dnevnik.services.user_specific.KorisnikServiceImpl;
 
 @RestController
 @RequestMapping(path = "/api/v1/users")
-@Secured("ROLE_ADMIN")
 public class KorisnikController {
 	
 	/**
@@ -46,59 +43,42 @@ public class KorisnikController {
 	@Autowired
 	private ServiceResponseHandler serviceResponseHandler;
 	
+	@Secured("ROLE_ADMIN")
 	@GetMapping("/")
-	public ResponseEntity<?> getAllUsers(){
-		KorisnikServiceResponse response = korisnikService.getAllUsers();
-		return serviceResponseHandler.handleResponse(response);
-	}
-	
-	@GetMapping("/")
-	public ResponseEntity<?> getAllUsers(@RequestBody RoleEntity role){
-		KorisnikServiceResponse response = korisnikService.getAllUsers();
-		return serviceResponseHandler.handleResponse(response);
-	}
-	
-	@GetMapping("/")
-	public ResponseEntity<?> getAllUsers(@RequestBody Integer role_id){
-		KorisnikServiceResponse response = korisnikService.getAllUsers();
-		return serviceResponseHandler.handleResponse(response);
-	}
-	
-	@GetMapping("/")
-	public ResponseEntity<?> getAllUsers(@RequestBody String role_name){
-		KorisnikServiceResponse response = korisnikService.getAllUsers();
-		return serviceResponseHandler.handleResponse(response);
+	public ResponseEntity<?> dobaviSveKorisnike(@RequestBody KorisnikDTO req){
+		KorisnikServiceResponse response = korisnikService.dobaviSveKorisnike(req);
+		return serviceResponseHandler.handleResponse((KorisnikServiceResponse) response);
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<?> getUserById(@PathVariable Integer id){
-		KorisnikServiceResponse response = korisnikService.getUserById(id);
-		return serviceResponseHandler.handleResponse(response);
+	public ResponseEntity<?> dobaviKorisnikaPoId(@PathVariable Integer id){
+		KorisnikServiceResponse response = korisnikService.dobaviKorisnikaPoId(id);
+		return serviceResponseHandler.handleResponse((KorisnikServiceResponse) response);
 	}
 	
 	@PostMapping("/")
-	public ResponseEntity<?> createUser(@Valid @RequestBody KorisnikEntity noviKorisnik) {
-		KorisnikServiceResponse response = korisnikService.createNewUser(noviKorisnik);
-		return serviceResponseHandler.handleResponse(response);
+	public ResponseEntity<?> napraviNovogKorisnika(@Valid @RequestBody KorisnikEntity noviKorisnik) {
+		KorisnikServiceResponse response = korisnikService.napraviNovogKorisnika(noviKorisnik);
+		return serviceResponseHandler.handleResponse((KorisnikServiceResponse) response);
 	}
 	
-	@PutMapping(value = "/{id}/email")
-	public ResponseEntity<?> changeEmail(@PathVariable Integer id, @RequestBody UserChangeEmailDTO newUserData) {
-		KorisnikServiceResponse response = korisnikService.changeEmail(id, newUserData);
-		return serviceResponseHandler.handleResponse(response);
+	@PutMapping("/{id}/email")
+	public ResponseEntity<?> promeniEmail(@PathVariable Integer id, @RequestBody KorisnikDTO noviPodaci) {
+		KorisnikServiceResponse response = korisnikService.promeniEmail(id, noviPodaci);
+		return serviceResponseHandler.handleResponse((KorisnikServiceResponse) response);
 		
 	}
 
-	@PutMapping(value = "/{id}/password")
-	public ResponseEntity<?> changePassword(@PathVariable Integer id, @RequestBody UserChangePassDTO newUserData) {
-		KorisnikServiceResponse response = korisnikService.changePassword(id, newUserData);
-		return serviceResponseHandler.handleResponse(response);
+	@PutMapping("/{id}/password")
+	public ResponseEntity<?> promeniSifru(@PathVariable Integer id, @RequestBody KorisnikDTO noviPodaci) {
+		KorisnikServiceResponse response = korisnikService.promeniSifru(id, noviPodaci);
+		return serviceResponseHandler.handleResponse((KorisnikServiceResponse) response);
 	}
 
-	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<?> deleteUserById(@PathVariable Integer id) {
-		KorisnikServiceResponse response = korisnikService.deleteUser(id);
-		return serviceResponseHandler.handleResponse(response);
+	@DeleteMapping("/{id}")
+	public ResponseEntity<?> obrisiKorisnika(@PathVariable Integer id) {
+		KorisnikServiceResponse response = korisnikService.obrisiKorisnika(id);
+		return serviceResponseHandler.handleResponse((KorisnikServiceResponse) response);
 	}
 
 

@@ -4,18 +4,17 @@ import java.util.ArrayList;
 
 import org.springframework.http.HttpStatus;
 
-import com.iktpreobuka.elektronski_dnevnik.entities.OdeljenjeEntity;
 import com.iktpreobuka.elektronski_dnevnik.entities.PredmetEntity;
 
-public class NastavnikServiceResponse {
+public class PredmetServiceResponse{
 	
 	protected HttpStatus httpResponseCode;
 	protected String kod;
 	protected String poruka;
 	private ArrayList<PredmetEntity> predmeti = new ArrayList<PredmetEntity>();
-	private OdeljenjeEntity odeljenje;
+	private PredmetEntity predmet;
 	
-	public NastavnikServiceResponse() {
+	public PredmetServiceResponse() {
 		super();
 	}
 	
@@ -51,19 +50,15 @@ public class NastavnikServiceResponse {
 		this.predmeti = predmeti;
 	}
 	
-	public void setPredmeti(PredmetEntity predmet) {
+	public PredmetEntity getPredmet() {
+		return predmet;
+	}
+	
+	public void setPredmet(PredmetEntity predmet) {
 		this.predmeti.add(predmet) ;
 	}
 
-	public OdeljenjeEntity getOdeljenje() {
-		return odeljenje;
-	}
-
-	public void setOdeljenje(OdeljenjeEntity odeljenje) {
-		this.odeljenje = odeljenje;
-	}
-
-	public NastavnikServiceResponse(HttpStatus httpResponseCode, String poruka,
+	public PredmetServiceResponse(HttpStatus httpResponseCode, String poruka,
 			ArrayList<PredmetEntity> predmeti) {
 		super();
 		this.httpResponseCode = httpResponseCode;
@@ -73,33 +68,25 @@ public class NastavnikServiceResponse {
 		});
 	}
 	
-	public NastavnikServiceResponse(HttpStatus httpResponseCode, String poruka,
+	public PredmetServiceResponse(HttpStatus httpResponseCode, String poruka,
 			PredmetEntity predmet) {
 		super();
 		this.httpResponseCode = httpResponseCode;
 		this.poruka = poruka;
-		this.predmeti.add(predmet);
+		this.predmet = predmet;
 	}
 	
-	public NastavnikServiceResponse(HttpStatus httpResponseCode, String poruka,
-			OdeljenjeEntity odeljenje) {
-		super();
-		this.httpResponseCode = httpResponseCode;
-		this.poruka = poruka;
-		this.odeljenje = odeljenje;
-	}	
-	
-	public NastavnikServiceResponse(HttpStatus httpResponseCode, String kod, String poruka) {
+	public PredmetServiceResponse(HttpStatus httpResponseCode, String kod, String poruka) {
 		super();
 		this.httpResponseCode = httpResponseCode;
 		this.kod = kod;
 		this.poruka = poruka;
 	}
 	
-	public NastavnikServiceResponse(HttpStatus httpResponseCode, String poruka) {
+	public PredmetServiceResponse(HttpStatus httpResponseCode, String poruka) {
 		super();
 		this.httpResponseCode = httpResponseCode;
 		this.poruka = poruka;
 	}
-	
+
 }

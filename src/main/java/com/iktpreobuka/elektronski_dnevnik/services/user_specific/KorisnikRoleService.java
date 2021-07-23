@@ -1,20 +1,15 @@
 package com.iktpreobuka.elektronski_dnevnik.services.user_specific;
 
+import com.iktpreobuka.elektronski_dnevnik.dto.KorisnikDTO;
 import com.iktpreobuka.elektronski_dnevnik.dto.responses.KorisnikServiceResponse;
 import com.iktpreobuka.elektronski_dnevnik.entities.RoleEntity;
 
 public interface KorisnikRoleService {
 	
-public KorisnikServiceResponse addRoleForUser(Integer id, RoleEntity role);
+	public RoleEntity rolaPostoji(KorisnikDTO req);
 	
-	public KorisnikServiceResponse addRoleForUser(Integer id, Integer role_id);
+	public KorisnikServiceResponse dodajRoluKorisniku(Integer id, KorisnikDTO req);
 	
-	public KorisnikServiceResponse addRoleForUser(Integer id, String  role_name);
-	
-	public KorisnikServiceResponse removeRoleFromUser(Integer id, RoleEntity role);
-	
-	public KorisnikServiceResponse removeRoleFromUser(Integer id, Integer role_id);
-	
-	public KorisnikServiceResponse removeRoleFromUser(Integer id, String role_name);
+	public KorisnikServiceResponse obrisiRoluKorisniku(Integer id, KorisnikDTO req);
 
 }

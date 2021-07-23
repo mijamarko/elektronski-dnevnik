@@ -8,57 +8,78 @@ import com.iktpreobuka.elektronski_dnevnik.entities.KorisnikEntity;
 
 public class KorisnikServiceResponse {
 	
-	private HttpStatus httpResponseCode;
-	private String code;
-	private String message;
+	protected HttpStatus httpResponseCode;
+	protected String kod;
+	protected String poruka;
 	private ArrayList<KorisnikEntity> korisnici = new ArrayList<KorisnikEntity>();
+	
 	public KorisnikServiceResponse() {
 		super();
 		}
+	
 	public HttpStatus getHttpResponseCode() {
 		return httpResponseCode;
 	}
+
 	public void setHttpResponseCode(HttpStatus httpResponseCode) {
 		this.httpResponseCode = httpResponseCode;
 	}
-	public String getCode() {
-		return code;
+
+	public String getKod() {
+		return kod;
 	}
-	public void setCode (String code) {
-		this.code = code;
+
+	public void setKod(String kod) {
+		this.kod = kod;
 	}
-	public String getMessage() {
-		return message;
+
+	public String getPoruka() {
+		return poruka;
 	}
-	public void setMessage(String message) {
-		this.message = message;
+
+	public void setPoruka(String poruka) {
+		this.poruka = poruka;
 	}
+	
 	public ArrayList<KorisnikEntity> getKorisnici() {
 		return korisnici;
 	}
+	
 	public void setKorisnici(ArrayList<KorisnikEntity> korisnici) {
 		this.korisnici = korisnici;
 	}
+	
 	public void setKorisnici(KorisnikEntity korisnik) {
 		this.korisnici.add(korisnik);
 	}
 	
-	public KorisnikServiceResponse(HttpStatus httpResponseCode, String code, String message, ArrayList<KorisnikEntity> korisnici) {
+	public KorisnikServiceResponse(HttpStatus httpResponseCode, String poruka, ArrayList<KorisnikEntity> korisnici) {
 		super();
 		this.httpResponseCode = httpResponseCode;
-		this.code = code;
-		this.message = message;
+		this.poruka = poruka;
 		korisnici.forEach((korisnik) -> {
 			this.korisnici.add(korisnik);
 		});
 	}
 	
-	public KorisnikServiceResponse(HttpStatus httpResponseCode, String code, String message, KorisnikEntity korisnik) {
+	public KorisnikServiceResponse(HttpStatus httpResponseCode, String poruka, KorisnikEntity korisnik) {
 		super();
 		this.httpResponseCode = httpResponseCode;
-		this.code = code;
-		this.message = message;
+		this.poruka = poruka;
 		this.korisnici.add(korisnik);
+	}
+	
+	public KorisnikServiceResponse(HttpStatus httpResponseCode, String kod, String poruka) {
+		super();
+		this.httpResponseCode = httpResponseCode;
+		this.kod = kod;
+		this.poruka = poruka;
+	}
+	
+	public KorisnikServiceResponse(HttpStatus httpResponseCode, String poruka) {
+		super();
+		this.httpResponseCode = httpResponseCode;
+		this.poruka = poruka;
 	}
 	
 

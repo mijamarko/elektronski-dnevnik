@@ -9,5 +9,14 @@ public class Encryption {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		return encoder.matches(password, encryptedPassword);
 	}
+	
+	public static void encodePasswordPls(String password) {
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		System.out.println(encoder.encode(password));
+	}
+	
+	public static void main (String[] args) {
+		encodePasswordPls("nin123o456cka");
+	}
 
 }

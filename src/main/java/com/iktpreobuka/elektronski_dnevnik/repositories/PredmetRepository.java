@@ -6,6 +6,6 @@ import com.iktpreobuka.elektronski_dnevnik.entities.PredmetEntity;
 
 public interface PredmetRepository extends CrudRepository<PredmetEntity, Integer> {
 	
-	public PredmetEntity findByName(String name);
+	public PredmetEntity findByNazivPredmeta(String name);
 
 }
