@@ -2,6 +2,8 @@ package com.iktpreobuka.elektronski_dnevnik.controllers.user_specific;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.iktpreobuka.elektronski_dnevnik.controllers.ServiceResponseHandler;
@@ -21,6 +24,7 @@ import com.iktpreobuka.elektronski_dnevnik.entities.KorisnikEntity;
 import com.iktpreobuka.elektronski_dnevnik.services.user_specific.KorisnikServiceImpl;
 
 @RestController
+@Secured("ROLE_ADMIN")
 @RequestMapping(path = "/api/v1/users")
 public class KorisnikController {
 	
@@ -37,16 +41,29 @@ public class KorisnikController {
 	 * TODO Odredi secured anotacije
 	 */
 	
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	
 	@Autowired
 	private KorisnikServiceImpl korisnikService;
 	
 	@Autowired
 	private ServiceResponseHandler serviceResponseHandler;
 	
-	@Secured("ROLE_ADMIN")
+	
 	@GetMapping("/")
-	public ResponseEntity<?> dobaviSveKorisnike(@RequestBody KorisnikDTO req){
-		KorisnikServiceResponse response = korisnikService.dobaviSveKorisnike(req);
+	public ResponseEntity<?> dobaviSveKorisnike(){
+		KorisnikServiceResponse response = korisnikService.dobaviSveKorisnike();
+		return serviceResponseHandler.handleResponse((KorisnikServiceResponse) response);
+	}
+	
+	@GetMapping("/roles/{roleId}")
+	public ResponseEntity<?> dobaviSveKorisnike(@PathVariable Integer roleId){
+		KorisnikServiceResponse response = korisnikService.dobaviSveKorisnike(roleId);
+		return serviceResponseHandler.handleResponse((KorisnikServiceResponse) response);
+	}
+	@GetMapping("/roles")
+	public ResponseEntity<?> dobaviSveKorisnike(@RequestParam String roleName){
+		KorisnikServiceResponse response = korisnikService.dobaviSveKorisnike(roleName);
 		return serviceResponseHandler.handleResponse((KorisnikServiceResponse) response);
 	}
 	
@@ -58,6 +75,7 @@ public class KorisnikController {
 	
 	@PostMapping("/")
 	public ResponseEntity<?> napraviNovogKorisnika(@Valid @RequestBody KorisnikEntity noviKorisnik) {
+		logger.info("Pogodjen post endpoint za pravljenje korisnika");
 		KorisnikServiceResponse response = korisnikService.napraviNovogKorisnika(noviKorisnik);
 		return serviceResponseHandler.handleResponse((KorisnikServiceResponse) response);
 	}

@@ -35,7 +35,6 @@ public class RoleEntity {
 			joinColumns = @JoinColumn(name = "role_id"),
 			inverseJoinColumns = @JoinColumn(name = "user_id")
 			)
-	@JsonManagedReference(value = "user_roles")
 	private List<KorisnikEntity> users = new ArrayList<KorisnikEntity>();
 
 	public RoleEntity() {

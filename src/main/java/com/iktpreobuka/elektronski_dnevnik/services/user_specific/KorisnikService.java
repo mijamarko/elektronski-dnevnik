@@ -6,13 +6,13 @@ import com.iktpreobuka.elektronski_dnevnik.entities.KorisnikEntity;
 
 public interface KorisnikService {
 	
-	public KorisnikServiceResponse dobaviSveKorisnike(KorisnikDTO req);
+	public KorisnikServiceResponse dobaviSveKorisnike();
 	
 	public KorisnikServiceResponse dobaviKorisnikaPoId(Integer id);
 	
 	public KorisnikEntity korisnikPostoji(Integer id);
 	
-	public Boolean emailPostoji(String email);
+	public KorisnikEntity emailPostoji(String email);
 	
 	public KorisnikServiceResponse napraviNovogKorisnika(KorisnikEntity korisnik);
 	
