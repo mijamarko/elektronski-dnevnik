@@ -2,11 +2,11 @@ package com.iktpreobuka.elektronski_dnevnik.dto;
 
 import java.util.HashMap;
 
-public class IzostanakDTO {
+public class IzostanciDTO {
 	
 	private HashMap<String, Integer> kadaIKolikoIzostanaka = new HashMap<String, Integer>();
 
-	public IzostanakDTO() {
+	public IzostanciDTO() {
 		super();
 	}
 

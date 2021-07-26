@@ -1,7 +1,7 @@
 package com.iktpreobuka.elektronski_dnevnik.services;
 
 import com.iktpreobuka.elektronski_dnevnik.dto.EmailDTO;
-import com.iktpreobuka.elektronski_dnevnik.dto.IzostanakDTO;
+import com.iktpreobuka.elektronski_dnevnik.dto.IzostanciDTO;
 import com.iktpreobuka.elektronski_dnevnik.dto.IzostanakIzmenaDTO;
 import com.iktpreobuka.elektronski_dnevnik.dto.SifraDTO;
 import com.iktpreobuka.elektronski_dnevnik.dto.responses.ServiceResponse;
@@ -13,13 +13,17 @@ public interface UcenikService {
 	
 	public ServiceResponse dobaviSveUcenike();
 	
+	public ServiceResponse dobaviUcenikaPoId(Integer ucenikId);
+	
 	public ServiceResponse dobaviOdeljenjeKojeUcenikPohadja(Integer ucenikId);
 	
 	public ServiceResponse dobaviSveIzostankeUcenika(Integer ucenikId);
 	
 	public ServiceResponse dobaviSveIzostankeUcenikaPoTipu(Integer ucenikId, EIzostanak tipIzostanka);
 	
-	public ServiceResponse dobaviSveIzostankeUVremenskomPeriodu(Integer ucenikId, IzostanakIzmenaDTO izostanci);
+	public ServiceResponse dobaviSveIzostankeUVremenskomPeriodu(Integer ucenikId, IzostanakIzmenaDTO trazeniIzostanci);
+	
+	public ServiceResponse dobaviTipIzostankaUVremenskomPeriodu(Integer ucenikId,IzostanakIzmenaDTO noviPodaci);
 	
 	public ServiceResponse dobaviRoditeljeUcenika(Integer ucenikId);
 	
@@ -39,9 +43,9 @@ public interface UcenikService {
 	
 	public ServiceResponse napraviNovogUcenika(UcenikEntity ucenik);
 	
-	public ServiceResponse dodajNovuOcenuIzOdredjenogPredmeta(OcenaEntity ocena);
+	public ServiceResponse dodajNovuOcenuIzOdredjenogPredmeta(Integer ucenikId, OcenaEntity ocena);
 	
-	public ServiceResponse dodajNoveIzostanke(IzostanakDTO izostanci);
+	public ServiceResponse dodajNoveIzostanke(Integer ucenikId, IzostanciDTO izostanci);
 	
 	public ServiceResponse obrisiUcenika(Integer ucenikId);
 	
