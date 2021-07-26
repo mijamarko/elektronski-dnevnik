@@ -3,9 +3,8 @@ package com.iktpreobuka.elektronski_dnevnik.entities;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.AttributeOverride;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -19,14 +18,15 @@ import com.iktpreobuka.elektronski_dnevnik.entities.relationships.NastavnikPreda
 
 @JsonIgnoreProperties({ "handler", "hibernateLazyInitializer" })
 @Entity
-@AttributeOverride(name = "user_id", column = @Column(name = "nastavnik_id"))
 @Table(name = "nastavnici")
+@DiscriminatorValue("nastavnik")
 public class NastavnikEntity extends KorisnikEntity{
+	
 
 	@OneToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
-	@JoinColumn(name = "odeljenje_kom_je_razredni")
-	@JsonManagedReference(value = "razredni")
-	protected OdeljenjeEntity odeljenjeKomJeRazredni;
+	@JoinColumn(name = "odeljenje_id", referencedColumnName = "odeljenje_id")
+	@JsonManagedReference
+	private OdeljenjeEntity odeljenjeKomJeRazredni;
 	
 	@OneToMany(mappedBy = "nastavnik")
 	private List<NastavnikPredajePredmet> predmetiKojePredaje = new ArrayList<NastavnikPredajePredmet>();
@@ -34,6 +34,16 @@ public class NastavnikEntity extends KorisnikEntity{
 	public NastavnikEntity() {
 		super();
 	}
+
+	public OdeljenjeEntity getOdeljenjeKomJeRazredni() {
+		return odeljenjeKomJeRazredni;
+	}
+
+
+	public void setOdeljenjeKomJeRazredni(OdeljenjeEntity odeljenjeKomJeRazredni) {
+		this.odeljenjeKomJeRazredni = odeljenjeKomJeRazredni;
+	}
+
 
 	public OdeljenjeEntity getOdeljenje() {
 		return odeljenjeKomJeRazredni;

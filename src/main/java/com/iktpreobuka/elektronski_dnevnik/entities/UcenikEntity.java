@@ -3,9 +3,8 @@ package com.iktpreobuka.elektronski_dnevnik.entities;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.AttributeOverride;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -19,26 +18,26 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @JsonIgnoreProperties({ "handler", "hibernateLazyInitializer" })
-
 @Entity
 @Table(name = "ucenici")
-@AttributeOverride(name = "user_id", column = @Column(name = "ucenik_id"))
+@DiscriminatorValue("ucenik")
 public class UcenikEntity extends KorisnikEntity {
 	
+
 	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
-	@JsonManagedReference(value = "odeljenjeKojePohadja")
+	@JsonBackReference(value = "odeljenjeKojePohadja")
 	@JoinColumn(name = "odeljenjeKojePohadja")
 	private OdeljenjeEntity odeljenjeKojePohadja;
 	
 	@OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY, mappedBy = "ucenikKojiJeIzostao")
-	@JsonBackReference(value = "izostanci")
+	@JsonManagedReference(value = "izostanci")
 	private List<IzostanakEntity> izostanci = new ArrayList<IzostanakEntity>();
 	
 	@ManyToMany(mappedBy = "deca")
 	private List<RoditeljEntity> roditelji = new ArrayList<RoditeljEntity>();
 	
 	@OneToMany(mappedBy = "ucenik", cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
-	@JsonBackReference(value = "ocene")
+	@JsonManagedReference(value = "ocene")
 	private List<OcenaEntity> ocene = new ArrayList<OcenaEntity>();
 
 	public UcenikEntity() {

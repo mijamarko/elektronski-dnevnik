@@ -2,34 +2,17 @@ package com.iktpreobuka.elektronski_dnevnik.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 
-import com.iktpreobuka.elektronski_dnevnik.dto.responses.KorisnikServiceResponse;
-import com.iktpreobuka.elektronski_dnevnik.dto.responses.NastavnikServiceResponse;
-import com.iktpreobuka.elektronski_dnevnik.entities.KorisnikEntity;
-import com.iktpreobuka.elektronski_dnevnik.entities.OdeljenjeEntity;
-import com.iktpreobuka.elektronski_dnevnik.entities.PredmetEntity;
+import com.iktpreobuka.elektronski_dnevnik.dto.responses.ServiceResponse;
 import com.iktpreobuka.elektronski_dnevnik.util.RestError;
 
-@Component
 public class ServiceResponseHandler {
 	
-	public ResponseEntity<?> handleResponse(KorisnikServiceResponse response){
-		if(response.getHttpResponseCode().equals(HttpStatus.OK)) {
-			return new ResponseEntity<Iterable<KorisnikEntity>>(response.getKorisnici(), response.getHttpResponseCode());
+	public ResponseEntity<?> handleResponse(ServiceResponse response){
+		if(response.getHttpStatus() == HttpStatus.OK) {
+			return new ResponseEntity<ServiceResponse>(new ServiceResponse(response.getPoruka(), response.getHttpStatus(), response.getValue()), HttpStatus.OK);
 		}
-		return new ResponseEntity<RestError>(new RestError(response.getKod(), response.getPoruka()), response.getHttpResponseCode());
-	}
-	
-	
-	public ResponseEntity<?> handleResponse(NastavnikServiceResponse response){
-		if(response.getHttpResponseCode().equals(HttpStatus.OK)) {
-			if(!response.getPredmeti().equals(null)) {
-				return new ResponseEntity<Iterable<PredmetEntity>>(response.getPredmeti(), response.getHttpResponseCode());
-			}
-			return new ResponseEntity<OdeljenjeEntity>(response.getOdeljenje(), response.getHttpResponseCode());
-		}
-		return new ResponseEntity<RestError>(new RestError(response.getKod(), response.getPoruka()), response.getHttpResponseCode());
+		return new ResponseEntity<RestError>(new RestError(response.getKod(), response.getPoruka()), HttpStatus.BAD_REQUEST);
 	}
 
 }

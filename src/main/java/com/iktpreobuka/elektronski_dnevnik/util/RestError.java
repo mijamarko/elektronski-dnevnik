@@ -2,28 +2,28 @@ package com.iktpreobuka.elektronski_dnevnik.util;
 
 public class RestError {
 	
-	private String code;
-	private String message;
+	private String kod;
+	private String poruka;
 	
 	public RestError() {
 		super();
 	}
-	public RestError(String code, String message) {
+	public RestError(String kod, String poruka) {
 		super();
-		this.code = code;
-		this.message = message;
+		this.kod = kod;
+		this.poruka = poruka;
 	}
-	public String getCode() {
-		return code;
+	public String getKod() {
+		return kod;
 	}
-	public void setCode(String code) {
-		this.code = code;
+	public void setKod(String kod) {
+		this.kod = kod;
 	}
-	public String getMessage() {
-		return message;
+	public String getPoruka() {
+		return poruka;
 	}
-	public void setMessage(String message) {
-		this.message = message;
+	public void setPoruka(String poruka) {
+		this.poruka = poruka;
 	}
 	
 	

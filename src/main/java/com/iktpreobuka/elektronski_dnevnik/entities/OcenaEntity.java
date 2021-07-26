@@ -19,10 +19,10 @@ import javax.validation.constraints.PastOrPresent;
 
 import org.hibernate.validator.constraints.Range;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.iktpreobuka.elektronski_dnevnik.entities.relationships.NastavnikPredajePredmet;
 import com.iktpreobuka.elektronski_dnevnik.enums.EPolugodiste;
 import com.iktpreobuka.elektronski_dnevnik.enums.ETip_Ocene;
@@ -40,6 +40,10 @@ public class OcenaEntity {
 	@PastOrPresent
 	private Date datumDodele;
 	
+	@JsonFormat(shape = Shape.STRING, pattern = "dd-MM-yyyy")
+	@PastOrPresent
+	private Date datumIzmene;
+	
 	@Range(min = 0, max = 5)
 	private Integer ocena;
 	
@@ -48,12 +52,12 @@ public class OcenaEntity {
 		@JoinColumn(name = "nastavnik"),
 		@JoinColumn(name = "predmet")
 	})
-	@JsonManagedReference(value = "ocena")
+	@JsonBackReference(value = "ocena")
 	private NastavnikPredajePredmet nastavnikPredmet;
 	
 	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
 	@JoinColumn(name = "ucenik")
-	@JsonManagedReference(value = "ocene")
+	@JsonBackReference(value = "ocene")
 	private UcenikEntity ucenik;
 	
 	@Version
@@ -132,6 +136,16 @@ public class OcenaEntity {
 	public void setNastavnikPredmet(NastavnikPredajePredmet nastavnikPredmet) {
 		this.nastavnikPredmet = nastavnikPredmet;
 	}
+
+	public Date getDatumIzmene() {
+		return datumIzmene;
+	}
+
+	public void setDatumIzmene(Date datumIzmene) {
+		this.datumIzmene = datumIzmene;
+	}
+	
+	
 	
 	
 }

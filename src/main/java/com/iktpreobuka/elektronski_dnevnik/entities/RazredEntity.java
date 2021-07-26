@@ -13,8 +13,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @JsonIgnoreProperties({ "handler", "hibernateLazyInitializer" })
 @Entity
@@ -25,7 +25,7 @@ public class RazredEntity {
 	private Integer id;
 	
 	@OneToMany(mappedBy = "razred", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
-	@JsonBackReference(value = "odeljenja")
+	@JsonManagedReference(value = "odeljenja")
 	private List<OdeljenjeEntity> odeljenja = new ArrayList<OdeljenjeEntity>();
 	
 	@NotBlank

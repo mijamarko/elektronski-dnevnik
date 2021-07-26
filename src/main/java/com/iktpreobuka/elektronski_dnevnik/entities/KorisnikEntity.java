@@ -1,28 +1,34 @@
 package com.iktpreobuka.elektronski_dnevnik.entities;
 
-import java.util.List;
-
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.ManyToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties({ "handler", "hibernateLazyInitializer" })
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "korisnici")
-public class KorisnikEntity {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "tip_korisnika", discriminatorType = DiscriminatorType.STRING)
+public class KorisnikEntity {	
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -36,6 +42,8 @@ public class KorisnikEntity {
 
 	@NotBlank(message = "Lozinka ne moze biti prazna.")
 	@Size(min = 8, max = 100, message = "Lozinka mora biti duzine izmedju {min} i {max} karaktera.")
+	@Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,100}$",
+			message = "Sifra mora imati najmanje jedan lowercase karakter, jedan uppercase karakter, jedan broj, i jedan specijalni karakter.")
 	private String sifra;
 
 	@NotBlank(message = "Ime ne moze biti prazno.")
@@ -45,27 +53,17 @@ public class KorisnikEntity {
 	@NotBlank(message = "Prezime ne moze biti prazno.")
 	@Size(min = 3, max = 15, message = "Prezime mora biti duzine izmedju {min} i {max} karaktera.")
 	private String prezime;
-	
+
 	@NotBlank(message = "Email polje ne moze biti prazno.")
+	@Pattern(regexp = "^[a-zA-Z0-9_!#$%&*+/=?{}~^.-]+@[a-zA-Z0-9.-]+$")
 	private String email;
 
 	@Version
 	private Integer version;
-
-	@ManyToMany(mappedBy = "users")
-	private List<RoleEntity> roles;
-
-	public KorisnikEntity() {
-		super();
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
+	
+	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+	@JoinColumn(name = "role")
+	private RoleEntity role;
 
 	public String getKorisnickoIme() {
 		return korisnickoIme;
@@ -74,11 +72,11 @@ public class KorisnikEntity {
 	public void setKorisnickoIme(String korisnickoIme) {
 		this.korisnickoIme = korisnickoIme;
 	}
-
+	@JsonIgnore
 	public String getSifra() {
 		return sifra;
 	}
-
+	@JsonProperty
 	public void setSifra(String sifra) {
 		this.sifra = sifra;
 	}
@@ -107,20 +105,16 @@ public class KorisnikEntity {
 		this.email = email;
 	}
 
-	public Integer getVersion() {
-		return version;
+	public RoleEntity getRole() {
+		return role;
 	}
 
-	public void setVersion(Integer version) {
-		this.version = version;
+	public void setRole(RoleEntity role) {
+		this.role = role;
 	}
-
-	public List<RoleEntity> getRoles() {
-		return roles;
+	
+	public Integer getId() {
+		return id;
 	}
-
-	public void setRoles(List<RoleEntity> roles) {
-		this.roles = roles;
-	}
-
+	
 }

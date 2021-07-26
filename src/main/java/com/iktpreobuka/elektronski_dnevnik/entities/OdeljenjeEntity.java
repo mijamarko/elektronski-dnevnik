@@ -26,13 +26,14 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Entity
 @Table(name = "odeljenja")
 public class OdeljenjeEntity {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "odeljenje_id")
 	private Integer id;
 	
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
-	@JsonManagedReference(value = "odeljenja")
+	@JsonBackReference(value = "odeljenja")
 	@JoinColumn(name = "razred_id", nullable = false)
 	private RazredEntity razred;
 	
@@ -40,11 +41,11 @@ public class OdeljenjeEntity {
 	private Integer brojOdeljenja;
 	
 	@OneToMany(mappedBy = "odeljenjeKojePohadja", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
-	@JsonBackReference(value = "odeljenjeKojePohadja")
+	@JsonManagedReference(value = "odeljenjeKojePohadja")
 	private List<UcenikEntity> ucenici = new ArrayList<UcenikEntity>();
 	
-	@OneToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
-	@JsonBackReference(value = "razredni")
+	@OneToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY, mappedBy = "odeljenjeKomJeRazredni")
+	@JsonBackReference
 	private NastavnikEntity razredniStaresina;
 	
 	@Version

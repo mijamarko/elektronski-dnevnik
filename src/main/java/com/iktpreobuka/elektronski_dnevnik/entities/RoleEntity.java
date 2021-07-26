@@ -1,25 +1,29 @@
 package com.iktpreobuka.elektronski_dnevnik.entities;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name = "roles")
 @JsonIgnoreProperties({"hibernateLazyInitializer, handler"})
+@JsonIdentityInfo(
+		generator = ObjectIdGenerators.PropertyGenerator.class,
+		property = "id")
 public class RoleEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -29,13 +33,9 @@ public class RoleEntity {
 	@NotBlank
 	private String name;
 	
-	@ManyToMany
-	@JoinTable(
-			name = "UserRoles",
-			joinColumns = @JoinColumn(name = "role_id"),
-			inverseJoinColumns = @JoinColumn(name = "user_id")
-			)
-	private List<KorisnikEntity> users = new ArrayList<KorisnikEntity>();
+	@JsonIgnore
+	@OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY, mappedBy = "role")
+	private List<KorisnikEntity> users;
 
 	public RoleEntity() {
 		super();

@@ -12,7 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.iktpreobuka.elektronski_dnevnik.entities.NastavnikEntity;
 import com.iktpreobuka.elektronski_dnevnik.entities.OcenaEntity;
 import com.iktpreobuka.elektronski_dnevnik.entities.PredmetEntity;
@@ -35,13 +35,12 @@ public class NastavnikPredajePredmet {
 	private PredmetEntity predmet;
 	
 	@OneToMany(mappedBy = "nastavnikPredmet", cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
-	@JsonBackReference(value = "ocena")
+	@JsonManagedReference(value = "ocena")
 	private List<OcenaEntity> ocena = new ArrayList<OcenaEntity>();
 
 	public NastavnikPredajePredmet() {
 		super();
 	}
-	
 	
 
 	public NastavnikPredajePredmet(NastavnikEntity nastavnik, PredmetEntity predmet, List<OcenaEntity> ocena) {
