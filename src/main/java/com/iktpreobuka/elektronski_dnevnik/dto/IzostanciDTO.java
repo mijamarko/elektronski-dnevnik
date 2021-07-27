@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 public class IzostanciDTO {
 	
+	//datum i koliko izostanaka je napravljeno tada
 	private HashMap<String, Integer> kadaIKolikoIzostanaka = new HashMap<String, Integer>();
 
 	public IzostanciDTO() {

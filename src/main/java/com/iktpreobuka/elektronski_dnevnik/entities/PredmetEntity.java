@@ -3,16 +3,22 @@ package com.iktpreobuka.elektronski_dnevnik.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.iktpreobuka.elektronski_dnevnik.entities.relationships.NastavnikPredajePredmet;
 
@@ -35,6 +41,15 @@ public class PredmetEntity {
 	
 	@OneToMany(mappedBy = "predmet")
 	private List<NastavnikPredajePredmet> predavaci = new ArrayList<NastavnikPredajePredmet>();
+	
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+	@JoinTable(
+			name = "predmet_odeljenje",
+			joinColumns = @JoinColumn(name = "predmet_id"),
+			inverseJoinColumns = @JoinColumn(name = "odeljenje_id")
+			)
+	@JsonBackReference(value = "odeljenjaKojaSlusajuPredmet")
+	private List<OdeljenjeEntity> odeljenjaKojaSlusajuPredmet = new ArrayList<OdeljenjeEntity>();
 
 	public PredmetEntity() {
 		super();
@@ -63,6 +78,15 @@ public class PredmetEntity {
 	public void setPredavaci(List<NastavnikPredajePredmet> predavaci) {
 		this.predavaci = predavaci;
 	}
+
+	public List<OdeljenjeEntity> getOdeljenjaKojaSlusajuPredmet() {
+		return odeljenjaKojaSlusajuPredmet;
+	}
+
+	public void setOdeljenjaKojaSlusajuPredmet(List<OdeljenjeEntity> odeljenjaKojaSlusajuPredmet) {
+		this.odeljenjaKojaSlusajuPredmet = odeljenjaKojaSlusajuPredmet;
+	}
+	
 	
 
 }

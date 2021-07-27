@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -47,6 +48,10 @@ public class OdeljenjeEntity {
 	@OneToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY, mappedBy = "odeljenjeKomJeRazredni")
 	@JsonBackReference
 	private NastavnikEntity razredniStaresina;
+	
+	@ManyToMany(mappedBy = "odeljenjaKojaSlusajuPredmet")
+	@JsonManagedReference(value = "odeljenjaKojaSlusajuPredmet")
+	private List<PredmetEntity> predmetiKojeOdeljenjeSlusa = new ArrayList<PredmetEntity>();
 	
 	@Version
 	private Integer version;
@@ -101,6 +106,14 @@ public class OdeljenjeEntity {
 
 	public void setVersion(Integer version) {
 		this.version = version;
+	}
+
+	public List<PredmetEntity> getPredmetiKojeOdeljenjeSlusa() {
+		return predmetiKojeOdeljenjeSlusa;
+	}
+
+	public void setPredmetiKojeOdeljenjeSlusa(List<PredmetEntity> predmetiKojeOdeljenjeSlusa) {
+		this.predmetiKojeOdeljenjeSlusa = predmetiKojeOdeljenjeSlusa;
 	}
 	
 	

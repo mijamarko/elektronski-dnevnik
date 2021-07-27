@@ -45,7 +45,7 @@ public class OcenaEntity {
 	private Date datumIzmene;
 	
 	@Range(min = 0, max = 5)
-	private Integer ocena;
+	private Double ocena;
 	
 	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
 	@JoinColumns({
@@ -89,11 +89,11 @@ public class OcenaEntity {
 		this.datumDodele = datumDodele;
 	}
 
-	public Integer getOcena() {
+	public Double getOcena() {
 		return ocena;
 	}
 
-	public void setOcena(Integer ocena) {
+	public void setOcena(Double ocena) {
 		this.ocena = ocena;
 	}
 

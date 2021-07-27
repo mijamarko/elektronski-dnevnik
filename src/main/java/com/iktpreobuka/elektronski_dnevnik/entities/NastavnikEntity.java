@@ -44,15 +44,6 @@ public class NastavnikEntity extends KorisnikEntity{
 		this.odeljenjeKomJeRazredni = odeljenjeKomJeRazredni;
 	}
 
-
-	public OdeljenjeEntity getOdeljenje() {
-		return odeljenjeKomJeRazredni;
-	}
-
-	public void setOdeljenje(OdeljenjeEntity odeljenje) {
-		this.odeljenjeKomJeRazredni = odeljenje;
-	}
-
 	public List<NastavnikPredajePredmet> getPredmetiKojePredaje() {
 		return predmetiKojePredaje;
 	}
