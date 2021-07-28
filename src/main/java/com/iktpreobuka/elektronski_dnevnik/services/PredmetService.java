@@ -13,7 +13,7 @@ public interface PredmetService {
 	
 	public ServiceResponse dodajNovogNastavnikaKojiPredajePredmet(Integer predmetId, Integer nastavnikId);
 	
-	public ServiceResponse dodajNovoOdeljenjeKojeSlusaPredmet(Integer predmetId, Integer nastavnikId, Integer odeljenjeId);
+	public ServiceResponse dodajNovoOdeljenjeKojeSlusaPredmet(Integer predmetId, Integer odeljenjeId);
 	
 	public ServiceResponse obrisiPredmet(Integer predmetId);
 	

@@ -11,7 +11,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
@@ -23,7 +22,6 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.iktpreobuka.elektronski_dnevnik.entities.relationships.NastavnikPredajePredmet;
 import com.iktpreobuka.elektronski_dnevnik.enums.EPolugodiste;
 import com.iktpreobuka.elektronski_dnevnik.enums.ETip_Ocene;
 
@@ -48,19 +46,17 @@ public class OcenaEntity {
 	private Double ocena;
 	
 	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
-	@JoinColumns({
-		@JoinColumn(name = "nastavnik"),
-		@JoinColumn(name = "predmet")
-	})
-	@JsonBackReference(value = "ocena")
-	private NastavnikPredajePredmet nastavnikPredmet;
-	
+	@JoinColumn(name = "nastavnik_id")
+	@JsonBackReference(value = "nastavnik_ocena")
 	private NastavnikEntity nastavnikKojiJeDaoOcenu;
 	
+	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+	@JoinColumn(name = "predmet_id")
+	@JsonBackReference(value = "predmet_ocena")
 	private PredmetEntity predmetIzKogJeOcena;
 	
 	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
-	@JoinColumn(name = "ucenik")
+	@JoinColumn(name = "ucenik_id")
 	@JsonBackReference(value = "ocene")
 	private UcenikEntity ucenik;
 	
@@ -133,20 +129,28 @@ public class OcenaEntity {
 		this.polugodiste = polugodiste;
 	}
 
-	public NastavnikPredajePredmet getNastavnikPredmet() {
-		return nastavnikPredmet;
-	}
-
-	public void setNastavnikPredmet(NastavnikPredajePredmet nastavnikPredmet) {
-		this.nastavnikPredmet = nastavnikPredmet;
-	}
-
 	public Date getDatumIzmene() {
 		return datumIzmene;
 	}
 
 	public void setDatumIzmene(Date datumIzmene) {
 		this.datumIzmene = datumIzmene;
+	}
+
+	public NastavnikEntity getNastavnikKojiJeDaoOcenu() {
+		return nastavnikKojiJeDaoOcenu;
+	}
+
+	public void setNastavnikKojiJeDaoOcenu(NastavnikEntity nastavnikKojiJeDaoOcenu) {
+		this.nastavnikKojiJeDaoOcenu = nastavnikKojiJeDaoOcenu;
+	}
+
+	public PredmetEntity getPredmetIzKogJeOcena() {
+		return predmetIzKogJeOcena;
+	}
+
+	public void setPredmetIzKogJeOcena(PredmetEntity predmetIzKogJeOcena) {
+		this.predmetIzKogJeOcena = predmetIzKogJeOcena;
 	}
 	
 	

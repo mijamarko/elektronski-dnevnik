@@ -20,7 +20,6 @@ import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.iktpreobuka.elektronski_dnevnik.entities.relationships.NastavnikPredajePredmet;
 
 @JsonIgnoreProperties({ "handler", "hibernateLazyInitializer" })
 
@@ -39,8 +38,13 @@ public class PredmetEntity {
 	private String nazivPredmeta;
 
 	
-	@OneToMany(mappedBy = "predmet")
-	private List<NastavnikPredajePredmet> predavaci = new ArrayList<NastavnikPredajePredmet>();
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+	@JoinTable(
+			name = "predmet_nastavnik",
+			joinColumns = @JoinColumn(name = "predmet_id"),
+			inverseJoinColumns = @JoinColumn(name = "nastavnik_id")
+			)
+	private List<NastavnikEntity> predavaci = new ArrayList<NastavnikEntity>();
 	
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	@JoinTable(
@@ -49,6 +53,10 @@ public class PredmetEntity {
 			inverseJoinColumns = @JoinColumn(name = "odeljenje_id")
 			)
 	private List<OdeljenjeEntity> odeljenjaKojaSlusajuPredmet = new ArrayList<OdeljenjeEntity>();
+	
+	@OneToMany(mappedBy = "predmetIzKogJeOcena")
+	@JsonManagedReference(value = "predmet_ocena")
+	private List<OcenaEntity> oceneIzOvogPredmeta = new ArrayList<OcenaEntity>();
 
 	public PredmetEntity() {
 		super();
@@ -70,11 +78,11 @@ public class PredmetEntity {
 		this.nazivPredmeta = nazivPredmeta;
 	}
 
-	public List<NastavnikPredajePredmet> getPredavaci() {
+	public List<NastavnikEntity> getPredavaci() {
 		return predavaci;
 	}
 
-	public void setPredavaci(List<NastavnikPredajePredmet> predavaci) {
+	public void setPredavaci(List<NastavnikEntity> predavaci) {
 		this.predavaci = predavaci;
 	}
 
@@ -85,6 +93,15 @@ public class PredmetEntity {
 	public void setOdeljenjaKojaSlusajuPredmet(List<OdeljenjeEntity> odeljenjaKojaSlusajuPredmet) {
 		this.odeljenjaKojaSlusajuPredmet = odeljenjaKojaSlusajuPredmet;
 	}
+
+	public List<OcenaEntity> getOceneIzOvogPredmeta() {
+		return oceneIzOvogPredmeta;
+	}
+
+	public void setOceneIzOvogPredmeta(List<OcenaEntity> oceneIzOvogPredmeta) {
+		this.oceneIzOvogPredmeta = oceneIzOvogPredmeta;
+	}
+	
 	
 	
 

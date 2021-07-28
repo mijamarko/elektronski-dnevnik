@@ -171,7 +171,7 @@ public class UcenikServiceImpl implements UcenikService {
 			UcenikEntity ucenik = (UcenikEntity) korisnik.get();
 			ArrayList<OcenaEntity> ocene = new ArrayList<OcenaEntity>();
 			ucenik.getOcene().forEach(o -> {
-				if (o.getNastavnikPredmet().getPredmet().getId() == predmetId) {
+				if (o.getPredmetIzKogJeOcena().getId() == predmetId) {
 					ocene.add(o);
 				}
 			});
@@ -193,10 +193,12 @@ public class UcenikServiceImpl implements UcenikService {
 			if (trenutnoOdeljenje != null) {
 				Optional<OdeljenjeEntity> novoOdeljenje = odeljenjeRepository.findById(odeljenjeId);
 				if (novoOdeljenje.isPresent()) {
+					//TODO odeljenjeService.obrisiUcenikaIzOdeljenja(odeljenjeId, ucenikId);
 					trenutnoOdeljenje.getUcenici().remove(ucenik);
 					odeljenjeRepository.save(trenutnoOdeljenje);
 					ucenik.setOdeljenjeKojePohadja(novoOdeljenje.get());
 					ucenikRepository.save(ucenik);
+					//TODO odeljenjeService.dodajUcenikaUOdeljenje(odeljenjeId, ucenikId);
 					novoOdeljenje.get().getUcenici().add(ucenik);
 					odeljenjeRepository.save(novoOdeljenje.get());
 					return new ServiceResponse("Odeljenje uspesno promenjeno", HttpStatus.OK, ucenik);

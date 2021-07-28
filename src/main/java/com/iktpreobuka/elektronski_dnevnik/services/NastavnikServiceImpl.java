@@ -15,7 +15,6 @@ import com.iktpreobuka.elektronski_dnevnik.entities.NastavnikEntity;
 import com.iktpreobuka.elektronski_dnevnik.entities.OdeljenjeEntity;
 import com.iktpreobuka.elektronski_dnevnik.entities.PredmetEntity;
 import com.iktpreobuka.elektronski_dnevnik.entities.RoleEntity;
-import com.iktpreobuka.elektronski_dnevnik.entities.relationships.NastavnikPredajePredmet;
 import com.iktpreobuka.elektronski_dnevnik.repositories.NastavnikRepository;
 import com.iktpreobuka.elektronski_dnevnik.repositories.OdeljenjeRepository;
 import com.iktpreobuka.elektronski_dnevnik.repositories.PredmetRepository;
@@ -35,6 +34,9 @@ public class NastavnikServiceImpl implements NastavnikService {
 	
 	@Autowired
 	private OdeljenjeRepository odeljenjeRepository;
+	
+	@Autowired
+	private PredmetServiceImpl predmetService;
 
 
 	@Override
@@ -67,9 +69,7 @@ public class NastavnikServiceImpl implements NastavnikService {
 		if(korisnik.isPresent()) {
 			NastavnikEntity nastavnik = (NastavnikEntity) korisnik.get();
 			ArrayList<PredmetEntity> predmeti = new ArrayList<PredmetEntity>();
-			nastavnik.getPredmetiKojePredaje().forEach(p -> {
-				predmeti.add(p.getPredmet());
-			});
+			nastavnik.getPredmetiKojePredaje().forEach(p -> predmeti.add(p));
 			if(predmeti.size() > 0) {
 				return new ServiceResponse("Predmeti za trazenog nastavnika", HttpStatus.OK, predmeti);
 			}
@@ -126,18 +126,16 @@ public class NastavnikServiceImpl implements NastavnikService {
 		Optional<KorisnikEntity> korisnik = nastavnikRepository.findById(nastavnikId);
 		if(korisnik.isPresent()) {
 			NastavnikEntity nastavnik = (NastavnikEntity) korisnik.get();
-			ArrayList<PredmetEntity> predmeti = new ArrayList<PredmetEntity>();
-			nastavnik.getPredmetiKojePredaje().forEach(p -> {
-				predmeti.add(p.getPredmet());
-			});
 			Optional<PredmetEntity> noviPredmet = predmetRepository.findById(predmetId);
 			if(noviPredmet.isPresent()) {
-				if(predmeti.contains(noviPredmet.get())) {
-					return new ServiceResponse("N-4", "Nastavnik vec predaje ovaj predmet", HttpStatus.BAD_REQUEST);
+				if(!nastavnik.getPredmetiKojePredaje().contains(noviPredmet.get())) {
+					nastavnik.getPredmetiKojePredaje().add(noviPredmet.get());
+					nastavnikRepository.save(nastavnik);
+					predmetService.dodajNovogNastavnikaKojiPredajePredmet(predmetId, nastavnikId);
+					return new ServiceResponse("Predmet uspesno dodat nastavniku", HttpStatus.OK);
+					
 				}
-				nastavnik.getPredmetiKojePredaje().add(new NastavnikPredajePredmet(nastavnik, noviPredmet.get()));
-				nastavnikRepository.save(nastavnik);
-				return new ServiceResponse("Predmet uspesno dodat nastavniku", HttpStatus.OK);
+				return new ServiceResponse("N-4", "Nastavnik vec predaje ovaj predmet", HttpStatus.BAD_REQUEST);
 			}
 			return new ServiceResponse("P-1", "Predmet ne postoji", HttpStatus.BAD_REQUEST);
 		}
@@ -154,6 +152,8 @@ public class NastavnikServiceImpl implements NastavnikService {
 				if(odeljenje.isPresent()) {
 					nastavnik.setOdeljenjeKomJeRazredni(odeljenje.get());
 					nastavnikRepository.save(nastavnik);
+					odeljenje.get().setRazredniStaresina(nastavnik);
+					odeljenjeRepository.save(odeljenje.get());
 					return new ServiceResponse("Odeljenje uspesno dodato nastavniku", HttpStatus.OK);
 				}
 				return new ServiceResponse("O-1", "Odeljenje ne postoji", HttpStatus.BAD_REQUEST);
@@ -183,6 +183,8 @@ public class NastavnikServiceImpl implements NastavnikService {
 				if(odeljenje.isPresent()) {
 					nastavnik.setOdeljenjeKomJeRazredni(null);
 					nastavnikRepository.save(nastavnik);
+					odeljenje.get().setRazredniStaresina(null);
+					odeljenjeRepository.save(odeljenje.get());
 					return new ServiceResponse("Odeljenje uspesno obrisano nastavniku", HttpStatus.OK);
 				}
 				return new ServiceResponse("O-1", "Odeljenje ne postoji", HttpStatus.BAD_REQUEST);
@@ -197,14 +199,11 @@ public class NastavnikServiceImpl implements NastavnikService {
 		Optional<KorisnikEntity> korisnik = nastavnikRepository.findById(nastavnikId);
 		if(korisnik.isPresent()) {
 			NastavnikEntity nastavnik = (NastavnikEntity) korisnik.get();
-			ArrayList<PredmetEntity> predmeti = new ArrayList<PredmetEntity>();
-			nastavnik.getPredmetiKojePredaje().forEach(p -> {
-				predmeti.add(p.getPredmet());
-			});
-			Optional<PredmetEntity> predmetZaBrisanje = predmetRepository.findById(predmetId);
-			if(predmetZaBrisanje.isPresent()) {
-				if(predmeti.contains(predmetZaBrisanje.get())) {
-					nastavnik.getPredmetiKojePredaje().removeIf(p -> p.getPredmet().equals(predmetZaBrisanje.get()));
+			Optional<PredmetEntity> oppredmetZaBrisanje = predmetRepository.findById(predmetId);
+			if(oppredmetZaBrisanje.isPresent()) {
+				PredmetEntity predmetZaBrisanje = oppredmetZaBrisanje.get();
+				if(nastavnik.getPredmetiKojePredaje().contains(predmetZaBrisanje)) {
+					nastavnik.getPredmetiKojePredaje().removeIf(p -> p.equals(predmetZaBrisanje));
 					nastavnikRepository.save(nastavnik);
 					return new ServiceResponse("Predmet uspesno obrisan nastavniku", HttpStatus.OK);
 				}
