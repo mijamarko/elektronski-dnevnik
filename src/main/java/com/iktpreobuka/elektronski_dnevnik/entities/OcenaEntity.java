@@ -55,6 +55,10 @@ public class OcenaEntity {
 	@JsonBackReference(value = "ocena")
 	private NastavnikPredajePredmet nastavnikPredmet;
 	
+	private NastavnikEntity nastavnikKojiJeDaoOcenu;
+	
+	private PredmetEntity predmetIzKogJeOcena;
+	
 	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
 	@JoinColumn(name = "ucenik")
 	@JsonBackReference(value = "ocene")

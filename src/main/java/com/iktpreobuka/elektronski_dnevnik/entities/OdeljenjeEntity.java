@@ -50,7 +50,6 @@ public class OdeljenjeEntity {
 	private NastavnikEntity razredniStaresina;
 	
 	@ManyToMany(mappedBy = "odeljenjaKojaSlusajuPredmet")
-	@JsonManagedReference(value = "odeljenjaKojaSlusajuPredmet")
 	private List<PredmetEntity> predmetiKojeOdeljenjeSlusa = new ArrayList<PredmetEntity>();
 	
 	@Version

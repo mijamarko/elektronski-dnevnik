@@ -11,7 +11,7 @@ public interface IzostanakRepository extends CrudRepository<IzostanakEntity, Int
 	
 	public Iterable<IzostanakEntity> findByDatumIzostankaBetween(Date startDate, Date endDate);
 	
-	@Query("from IzostanakEntity i where i.datum_izostanka between ?1 and ?2 and where i.user_id = ?3")
+	@Query("from IzostanakEntity i where i.datumIzostanka between ?1 and ?2 and i.id = ?3")
 	public Iterable<IzostanakEntity> findByDatumIzostanakaBetweenZaUcenika(Date startDate, Date endDate, Integer ucenikId);
 
 }

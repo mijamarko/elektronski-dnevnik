@@ -41,7 +41,9 @@ public class NastavnikServiceImpl implements NastavnikService {
 	public ServiceResponse dobaviSveNastavnike() {
 		ArrayList<NastavnikEntity> nastavnici = new ArrayList<NastavnikEntity>();
 		nastavnikRepository.findAll().forEach(n -> {
-			nastavnici.add((NastavnikEntity) n);
+			if(n.getRole().getName().equals("ROLE_NASTAVNIK")) {
+				nastavnici.add((NastavnikEntity) n);
+			}	
 		});
 		if (nastavnici.size() > 0) {
 			return new ServiceResponse("Pronadjeni nastavnici", HttpStatus.OK,  nastavnici);

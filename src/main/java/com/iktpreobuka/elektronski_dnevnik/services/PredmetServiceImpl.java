@@ -30,6 +30,9 @@ public class PredmetServiceImpl implements PredmetService{
 	
 	@Autowired
 	private NastavnikServiceImpl nastavnikService;
+	
+	@Autowired
+	private OdeljenjeServiceImpl odeljenjeService;
 
 	@Override
 	public ServiceResponse dobaviSvePredmete() {
@@ -52,7 +55,7 @@ public class PredmetServiceImpl implements PredmetService{
 
 	@Override
 	public ServiceResponse napraviNoviPredmet(PredmetEntity predmet) {
-		if(predmetRepository.findByNazivPredmeta(predmet.getNazivPredmeta()) != null) {
+		if(predmetRepository.findByNazivPredmeta(predmet.getNazivPredmeta()) == null) {
 			predmetRepository.save(predmet);
 			return new ServiceResponse("Predmet uspesno kreiran", HttpStatus.OK);
 		}
@@ -114,20 +117,40 @@ public class PredmetServiceImpl implements PredmetService{
 
 	@Override
 	public ServiceResponse obrisiPredmet(Integer predmetId) {
-		// TODO Auto-generated method stub
-		return null;
+		if(predmetRepository.existsById(predmetId)) {
+			PredmetEntity predmet = predmetRepository.findById(predmetId).get();
+			predmet.getPredavaci().forEach(p -> {
+				nastavnikService.obrisiPredmetNastavniku(p.getNastavnik().getId(), predmetId);
+			});
+			predmetRepository.delete(predmet);
+			return new ServiceResponse("Predmet uspesno obrisan", HttpStatus.OK);
+		}
+		return new ServiceResponse("P-2", "Trazeni predmet ne postoji", HttpStatus.BAD_REQUEST);
 	}
 
 	@Override
 	public ServiceResponse obrisiNastavnikaKojiPredajePredmet(Integer predmetId, Integer nastavnikId) {
-		// TODO Auto-generated method stub
-		return null;
+		if(predmetRepository.existsById(predmetId)) {
+			PredmetEntity predmet = predmetRepository.findById(predmetId).get();
+			predmet.getPredavaci().removeIf(p -> p.getNastavnik().getId() == nastavnikId);
+			nastavnikService.obrisiPredmetNastavniku(nastavnikId, predmetId);
+			predmetRepository.save(predmet);
+			return new ServiceResponse("Nastavnik uspesno obrisan iz liste predavaca", HttpStatus.OK);
+		}
+		return new ServiceResponse("P-2", "Trazeni predmet ne postoji", HttpStatus.BAD_REQUEST);
 	}
 
 	@Override
 	public ServiceResponse obrisiOdeljenjeKojeSlusaPredmet(Integer predmetId, Integer odeljenjeId) {
-		// TODO Auto-generated method stub
-		return null;
+		if(predmetRepository.existsById(predmetId)) {
+			PredmetEntity predmet = predmetRepository.findById(predmetId).get();
+			predmet.getOdeljenjaKojaSlusajuPredmet().removeIf(o -> o.getId() == odeljenjeId);
+			predmetRepository.save(predmet);
+			odeljenjeRepository.findById(odeljenjeId).get().getPredmetiKojeOdeljenjeSlusa().remove(predmet);
+			odeljenjeRepository.save(odeljenjeRepository.findById(odeljenjeId).get());
+			return new ServiceResponse("Odeljenje uspesno obrisana iz liste odeljenja koja slusaju predmet", HttpStatus.OK);
+		}
+		return new ServiceResponse("P-2", "Trazeni predmet ne postoji", HttpStatus.BAD_REQUEST);
 	}
 	
 	

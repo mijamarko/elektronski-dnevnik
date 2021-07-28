@@ -18,8 +18,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.iktpreobuka.elektronski_dnevnik.entities.relationships.NastavnikPredajePredmet;
 
 @JsonIgnoreProperties({ "handler", "hibernateLazyInitializer" })
@@ -48,7 +48,6 @@ public class PredmetEntity {
 			joinColumns = @JoinColumn(name = "predmet_id"),
 			inverseJoinColumns = @JoinColumn(name = "odeljenje_id")
 			)
-	@JsonBackReference(value = "odeljenjaKojaSlusajuPredmet")
 	private List<OdeljenjeEntity> odeljenjaKojaSlusajuPredmet = new ArrayList<OdeljenjeEntity>();
 
 	public PredmetEntity() {
