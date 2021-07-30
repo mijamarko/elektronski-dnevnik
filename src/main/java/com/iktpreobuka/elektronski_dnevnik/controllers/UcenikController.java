@@ -4,6 +4,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -54,104 +55,123 @@ public class UcenikController {
 	private UcenikServiceImpl ucenikService;
 
 	@GetMapping(path = "/")
+	@Secured("ROLE_ADMIN")
 	public ResponseEntity<?> dobaviSveUcenike() {
 		return handler.handleResponse(ucenikService.dobaviSveUcenike());
 	}
 
 	@GetMapping(path = "/{ucenikId}")
+	@Secured({"ROLE_ADMIN", "ROLE_UCENIK", "ROLE_NASTAVNIK", "ROLE_RODITELJ"})
 	public ResponseEntity<?> dobaviUcenikaPoId(@PathVariable Integer ucenikId) {
 		return handler.handleResponse(ucenikService.dobaviUcenikaPoId(ucenikId));
 	}
 
 	@GetMapping(path = "/{ucenikId}/odeljenje")
+	@Secured({"ROLE_ADMIN", "ROLE_UCENIK"})
 	public ResponseEntity<?> dobaviOdeljenjeKojeUcenikPohadja(@PathVariable Integer ucenikId) {
 		return handler.handleResponse(ucenikService.dobaviOdeljenjeKojeUcenikPohadja(ucenikId));
 	}
 
 	@GetMapping(path = "/{ucenikId}/izostanci")
+	@Secured({"ROLE_ADMIN", "ROLE_UCENIK"})
 	public ResponseEntity<?> dobaviSveIzostankeUcenika(@PathVariable Integer ucenikId) {
 		return handler.handleResponse(ucenikService.dobaviSveIzostankeUcenika(ucenikId));
 	}
 
 	@GetMapping(path = "/{ucenikId}/izostanci/tip")
+	@Secured({"ROLE_ADMIN", "ROLE_UCENIK"})
 	public ResponseEntity<?> dobaviSveIzostankeUcenikaPoTipu(@PathVariable Integer ucenikId,
 			@RequestParam EIzostanak tipIzostanka) {
 		return handler.handleResponse(ucenikService.dobaviSveIzostankeUcenikaPoTipu(ucenikId, tipIzostanka));
 	}
 
 	@GetMapping(path = "/{ucenikId}/izostanci/vremenski-period")
+	@Secured({"ROLE_ADMIN", "ROLE_UCENIK"})
 	public ResponseEntity<?> dobaviSveIzostankeUVremenskomPeriodu(@PathVariable Integer ucenikId,
 			@RequestBody IzostanakIzmenaDTO noviPodaci) {
 		return handler.handleResponse(ucenikService.dobaviSveIzostankeUVremenskomPeriodu(ucenikId, noviPodaci));
 	}
 
 	@GetMapping(path = "/{ucenikId}/izostanci/tip-vremenski-period")
+	@Secured({"ROLE_ADMIN", "ROLE_UCENIK"})
 	public ResponseEntity<?> dobaviTipIzostankaUVremenskomPeriodu(@PathVariable Integer ucenikId,
 			@RequestBody IzostanakIzmenaDTO noviPodaci) {
 		return handler.handleResponse(ucenikService.dobaviTipIzostankaUVremenskomPerioduZaUcenika(ucenikId, noviPodaci));
 	}
 
 	@GetMapping(path = "/{ucenikId}/roditelji")
+	@Secured({"ROLE_ADMIN", "ROLE_UCENIK"})
 	public ResponseEntity<?> dobaviRoditeljeUcenika(@PathVariable Integer ucenikId) {
 		return handler.handleResponse(ucenikService.dobaviRoditeljeUcenika(ucenikId));
 	}
 
 	@GetMapping(path = "/{ucenikId}/ocene")
+	@Secured({"ROLE_ADMIN", "ROLE_UCENIK"})
 	public ResponseEntity<?> dobaviSveOceneUcenika(@PathVariable Integer ucenikId) {
 		return handler.handleResponse(ucenikService.dobaviSveOceneUcenika(ucenikId));
 	}
 
 	@GetMapping(path = "/{ucenikId}/ocene/predmeti")
+	@Secured({"ROLE_ADMIN", "ROLE_UCENIK"})
 	public ResponseEntity<?> dobaviSveOceneIzJednogPredmeta(@PathVariable Integer ucenikId,
 			@RequestParam Integer predmetId) {
 		return handler.handleResponse(ucenikService.dobaviSveOceneIzJednogPredmeta(ucenikId, predmetId));
 	}
 	
 	@GetMapping(path = "/{ucenikId}/ocene/prosek-polugodiste")
+	@Secured({"ROLE_ADMIN", "ROLE_NASTAVNIK"})
 	public ResponseEntity<?> izracunajUspehUcenikaUPolugodistu(@PathVariable Integer ucenikId, @RequestParam EPolugodiste polugodiste) {
 		return handler.handleResponse(ucenikService.izracunajUspehUcenikaUPolugodistu(ucenikId, polugodiste));
 	}
 	
 	@GetMapping(path = "/{ucenikId}/ocene/prosek-godina")
+	@Secured({"ROLE_ADMIN", "ROLE_NASTAVNIK"})
 	public ResponseEntity<?> izracunajUspehUcenikaUGodini(@PathVariable Integer ucenikId) {
 		return handler.handleResponse(ucenikService.izracunajUspehUcenikaUGodini(ucenikId));
 	}
 
 
 	@PutMapping(path = "/{ucenikId}/odeljenje")
+	@Secured({"ROLE_ADMIN", "ROLE_NASTAVNIK"})
 	public ResponseEntity<?> izmeniOdeljenjeKojePohadja(@PathVariable Integer ucenikId,
 			@RequestParam Integer odeljenjeId) {
 		return handler.handleResponse(ucenikService.izmeniOdeljenjeKojePohadja(ucenikId, odeljenjeId));
 	}
 
 	@PutMapping(path = "/{ucenikId}/izostanci/vremenski-period")
+	@Secured({"ROLE_ADMIN", "ROLE_NASTAVNIK"})
 	public ResponseEntity<?> izmeniIzostankeUVremenskomPeriodu(@PathVariable Integer ucenikId,
 			@RequestBody IzostanakIzmenaDTO noviPodaci) {
 		return handler.handleResponse(ucenikService.izmeniIzostankeUVremenskomPeriodu(ucenikId, noviPodaci));
 	}
 
 	@PutMapping(path = "/{ucenikId}/ocene/predmeti")
+	@Secured({"ROLE_ADMIN", "ROLE_NASTAVNIK"})
 	public ResponseEntity<?> izmeniOcenuIzPredmeta(@PathVariable Integer ucenikId, @RequestParam Integer ocenaId,
 			@RequestParam Double novaOcena) {
 		return handler.handleResponse(ucenikService.izmeniOcenuIzPredmeta(ucenikId, ocenaId, novaOcena));
 	}
 
 	@PutMapping(path = "/{ucenikId}/email")
+	@Secured({"ROLE_ADMIN", "ROLE_UCENIK"})
 	public ResponseEntity<?> izmeniEmail(@PathVariable Integer ucenikId, @RequestBody EmailDTO noviPodaci) {
 		return handler.handleResponse(ucenikService.izmeniEmail(ucenikId, noviPodaci));
 	}
 
 	@PutMapping(path = "/{ucenikId}/sifra")
+	@Secured({"ROLE_ADMIN", "ROLE_UCENIK"})
 	public ResponseEntity<?> izmeniSifru(@PathVariable Integer ucenikId, @RequestBody SifraDTO noviPodaci) {
 		return handler.handleResponse(ucenikService.izmeniSifru(ucenikId, noviPodaci));
 	}
 
 	@PostMapping(path = "/")
+	@Secured("ROLE_ADMIN")
 	public ResponseEntity<?> napraviNovogUcenika(@Valid @RequestBody UcenikEntity ucenik) {
 		return handler.handleResponse(ucenikService.napraviNovogUcenika(ucenik));
 	}
 	
 	@PostMapping(path = "/{ucenikId}/ocene/predmeti/{predmetId}")
+	@Secured({"ROLE_ADMIN", "ROLE_NASTAVNIK"})
 	public ResponseEntity<?> dodajNovuOcenuIzOdredjenogPredmeta(@PathVariable Integer ucenikId,
 			@PathVariable Integer predmetId,
 			@RequestParam Integer nastavnikId, @RequestParam Double ocena,
@@ -161,23 +181,27 @@ public class UcenikController {
 	}
 
 	@PostMapping(path = "/{ucenikId}/ocene/predmeti/{predmetId}/polugodiste")
+	@Secured({"ROLE_ADMIN", "ROLE_NASTAVNIK"})
 	public ResponseEntity<?> dodajProsecnuOcenuIzPredmetaUPolugodistu(@PathVariable Integer ucenikId, @PathVariable Integer predmetId,
 			@RequestParam EPolugodiste polugodiste, @RequestParam Integer nastavnikId) {
 		return handler.handleResponse(ucenikService.dodajProsecnuOcenuIzPredmetaUPolugodistu(ucenikId, predmetId, polugodiste, nastavnikId));
 	}
 
 	@PostMapping(path = "/{id}/ocene/predmeti/{predmetId}/polugodiste")
+	@Secured({"ROLE_ADMIN", "ROLE_NASTAVNIK"})
 	public ResponseEntity<?> dodajProsecnuOcenuIzPredmetaUGodini(@PathVariable Integer ucenikId, @PathVariable Integer predmetId,
 			@RequestParam Integer nastavnikId) {
 		return handler.handleResponse(ucenikService.dodajProsecnuOcenuIzPredmetaUGodini(ucenikId, predmetId, nastavnikId));
 	}
 
 	@PostMapping(path = "/{id}/izostanci")
+	@Secured({"ROLE_ADMIN", "ROLE_NASTAVNIK"})
 	public ResponseEntity<?> dodajNoveIzostanke(@PathVariable Integer ucenikId, @RequestBody IzostanciDTO izostanci) {
 		return handler.handleResponse(ucenikService.dodajNoveIzostanke(ucenikId, izostanci));
 	}
 
 	@DeleteMapping(path = "/{id}")
+	@Secured("ROLE_ADMIN")
 	public ResponseEntity<?> obrisiUcenika(@PathVariable Integer ucenikId) {
 		return handler.handleResponse(ucenikService.obrisiUcenika(ucenikId));
 	}

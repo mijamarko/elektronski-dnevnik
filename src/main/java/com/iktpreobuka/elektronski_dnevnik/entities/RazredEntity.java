@@ -15,6 +15,8 @@ import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.iktpreobuka.elektronski_dnevnik.security.Views;
 
 @JsonIgnoreProperties({ "handler", "hibernateLazyInitializer" })
 @Entity
@@ -22,14 +24,17 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 public class RazredEntity {
 	@Id
 	@Column(name = "razred_id")
+	@JsonView(Views.Admin.class)
 	private Integer id;
 	
 	@OneToMany(mappedBy = "razred", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	@JsonManagedReference(value = "odeljenja")
+	@JsonView(Views.Admin.class)
 	private List<OdeljenjeEntity> odeljenja = new ArrayList<OdeljenjeEntity>();
 	
 	@NotBlank
 	@Size(min = 1, max = 3, message = "Molimo unesite broj razreda rimskim ciframa.")
+	@JsonView(Views.Ucenik.class)
 	private String brojRazreda;
 
 	public RazredEntity() {

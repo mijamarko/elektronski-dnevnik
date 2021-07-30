@@ -5,8 +5,8 @@ import java.util.Map;
 
 public class Views {
 	
-	enum Role {
-		ROLE_UCENIK, ROLE_NASTAVNIK, ROLE_RODITELJ, ROLE_ADMIN
+	public enum Role {
+		ROLE_UCENIK, ROLE_NASTAVNIK, ROLE_RODITELJ, ROLE_ADMIN, ROLE_ANONYMOUS
 	}
 	
 	public static final Map<Role, Class> MAPPING = new HashMap<>();

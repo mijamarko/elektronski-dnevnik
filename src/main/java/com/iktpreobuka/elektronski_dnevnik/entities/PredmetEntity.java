@@ -20,6 +20,8 @@ import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.iktpreobuka.elektronski_dnevnik.security.Views;
 
 @JsonIgnoreProperties({ "handler", "hibernateLazyInitializer" })
 
@@ -30,11 +32,13 @@ public class PredmetEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO )
 	@Column(name = "predmet_id")
+	@JsonView(Views.Admin.class)
 	private Integer id;
 	
 	@Column(name = "naziv_predmeta")
 	@NotBlank(message = "Naziv predmeta ne sme biti prazan.")
 	@Size(min = 5, message = "Naziv predmeta mora biti duzi od {min} karaktera.")
+	@JsonView(Views.Ucenik.class)
 	private String nazivPredmeta;
 
 	
@@ -44,6 +48,7 @@ public class PredmetEntity {
 			joinColumns = @JoinColumn(name = "predmet_id"),
 			inverseJoinColumns = @JoinColumn(name = "nastavnik_id")
 			)
+	@JsonView(Views.Ucenik.class)
 	private List<NastavnikEntity> predavaci = new ArrayList<NastavnikEntity>();
 	
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
@@ -52,10 +57,12 @@ public class PredmetEntity {
 			joinColumns = @JoinColumn(name = "predmet_id"),
 			inverseJoinColumns = @JoinColumn(name = "odeljenje_id")
 			)
+	@JsonView(Views.Nastavnik.class)
 	private List<OdeljenjeEntity> odeljenjaKojaSlusajuPredmet = new ArrayList<OdeljenjeEntity>();
 	
 	@OneToMany(mappedBy = "predmetIzKogJeOcena")
 	@JsonManagedReference(value = "predmet_ocena")
+	@JsonView(Views.Nastavnik.class)
 	private List<OcenaEntity> oceneIzOvogPredmeta = new ArrayList<OcenaEntity>();
 
 	public PredmetEntity() {

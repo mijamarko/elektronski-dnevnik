@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="DEBUG">
+<Configuration status="INFO">
     <Properties>
         <Property name="logPath">src/logs</Property>
         <Property name="rollingFileName">e-dnevnik</Property>
@@ -17,7 +17,7 @@
         </RollingFile>
     </Appenders>
     <Loggers>
-        <Root level="DEBUG" additivity="false">
+        <Root level="INFO" additivity="false">
             <AppenderRef ref="rollingFile" />
             <AppenderRef ref="ConsoleAppender" />
         </Root>

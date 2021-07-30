@@ -16,7 +16,9 @@ import javax.validation.constraints.NotBlank;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.iktpreobuka.elektronski_dnevnik.security.Views;
 
 @Entity
 @Table(name = "roles")
@@ -24,6 +26,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @JsonIdentityInfo(
 		generator = ObjectIdGenerators.PropertyGenerator.class,
 		property = "id")
+@JsonView(Views.Admin.class)
 public class RoleEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

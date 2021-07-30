@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.iktpreobuka.elektronski_dnevnik.dto.EmailDTO;
@@ -27,6 +28,8 @@ public class AdminServiceImpl implements AdminService {
 	@Autowired
 	private RoleRepository roleRepository;
 	
+	private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+	
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Override
@@ -35,7 +38,9 @@ public class AdminServiceImpl implements AdminService {
 		ArrayList<AdminEntity> administratori = new ArrayList<AdminEntity>();
 		logger.info("Trazi sve administratore u repozitorijumu");
 		adminRepository.findAll().forEach(n -> {
-			administratori.add((AdminEntity) n);
+			if(n.getRole().getName().equals("ROLE_ADMIN")) {
+				administratori.add((AdminEntity) n);
+			}
 		});
 		if (administratori.size() > 0) {
 			return new ServiceResponse("Pronadjeni administratori", HttpStatus.OK,  administratori);
@@ -59,12 +64,12 @@ public class AdminServiceImpl implements AdminService {
 	
 	@Override
 	public ServiceResponse promeniEmail(Integer adminId, EmailDTO noviPodaci) {
+		
 		logger.info("Ulazi u promeniEmail metod za AdminService trazeci korisnika %d", adminId);
 		Optional<KorisnikEntity> korisnik = adminRepository.findById(adminId);
 		if(korisnik.isPresent()) {
 			AdminEntity administrator = (AdminEntity) korisnik.get();
-			//TODO security
-			if(administrator.getEmail().equals(noviPodaci.getEmail())) {
+			if(administrator.getEmail().equals(noviPodaci.getEmail()) && encoder.matches(noviPodaci.getSifra(), administrator.getSifra())) {
 				administrator.setEmail(noviPodaci.getNoviEmail());
 				adminRepository.save(administrator);
 				logger.info("Email promenjen administratoru sa id %d", adminId);
@@ -83,9 +88,8 @@ public class AdminServiceImpl implements AdminService {
 		Optional<KorisnikEntity> korisnik = adminRepository.findById(adminId);
 		if(korisnik.isPresent()) {
 			AdminEntity administrator = (AdminEntity) korisnik.get();
-			//TODO security
-			if(administrator.getEmail().equals(noviPodaci.getEmail())) {
-				administrator.setSifra(noviPodaci.getNovaSifra());
+			if(administrator.getEmail().equals(noviPodaci.getEmail()) && encoder.matches(noviPodaci.getSifra(), administrator.getSifra())) {
+				administrator.setSifra(encoder.encode(noviPodaci.getNovaSifra()));
 				adminRepository.save(administrator);
 				logger.info("Sifra promenjena administratoru sa id %d", adminId);
 				return new ServiceResponse("Sifra uspesno promenjena", HttpStatus.OK);
@@ -103,6 +107,7 @@ public class AdminServiceImpl implements AdminService {
 		if(adminRepository.findByEmail(admin.getEmail()) == null) {
 			RoleEntity role = roleRepository.findByName("ROLE_ADMIN");
 			admin.setRole(role);
+			admin.setSifra(encoder.encode(admin.getSifra()));
 			adminRepository.save(admin);
 			logger.info("administrator uspesno kreiran");
 			return new ServiceResponse("Admin uspesno kreiran", HttpStatus.OK, admin);

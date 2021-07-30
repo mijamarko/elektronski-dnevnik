@@ -2,6 +2,10 @@ package com.iktpreobuka.elektronski_dnevnik.dto;
 
 import org.springframework.http.HttpStatus;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.iktpreobuka.elektronski_dnevnik.security.Views;
+
+@JsonView(Views.Ucenik.class)
 public class ServiceResponse {
 	
 	private String kod;

@@ -4,6 +4,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,36 +35,43 @@ public class RazredController {
 	private RazredServiceImpl razredService;
 	
 	@GetMapping(path = "/")
+	@Secured("ROLE_ADMIN")
 	public ResponseEntity<?> dobaviSveRazrede() {
 		return handler.handleResponse(razredService.dobaviSveRazrede());
 	}
 
 	@GetMapping(path = "/{razredId}")
+	@Secured("ROLE_ADMIN")
 	public ResponseEntity<?> dobaviRazredPoId(@PathVariable Integer razredId) {
 		return handler.handleResponse(razredService.dobaviRazredPoId(razredId));
 	}
 	
 	@GetMapping(path = "/{razredId}/odeljenja")
+	@Secured("ROLE_ADMIN")
 	public ResponseEntity<?> dobaviSvaOdeljenjaRazreda(@PathVariable Integer razredId) {
 		return handler.handleResponse(razredService.dobaviSvaOdeljenjaRazreda(razredId));
 	}
 	
 	@PostMapping(path = "/")
+	@Secured("ROLE_ADMIN")
 	public ResponseEntity<?> napraviNoviRazred(@Valid @RequestBody RazredEntity razred) {
 		return handler.handleResponse(razredService.napraviNoviRazred(razred));
 	}
 
 	@PostMapping(path = "/{razredId}/odeljenja")
+	@Secured("ROLE_ADMIN")
 	public ResponseEntity<?> dodajNovoOdeljenjeRazredu(@PathVariable Integer razredId, @RequestParam Integer odeljenjeId) {
 		return handler.handleResponse(razredService.dodajNovoOdeljenjeRazredu(razredId, odeljenjeId));
 	}
 	
 	@DeleteMapping(path = "/{razredId}")
+	@Secured("ROLE_ADMIN")
 	public ResponseEntity<?> obrisiRazred(@PathVariable Integer razredId) {
 		return handler.handleResponse(razredService.obrisiRazred(razredId));
 	}
 	
 	@DeleteMapping(path = "/{razredId}/odeljenja")
+	@Secured("ROLE_ADMIN")
 	public ResponseEntity<?> obrisiOdeljenjeKojePripadaRazredu(@PathVariable Integer razredId, @RequestParam Integer odeljenjeId) {
 		return handler.handleResponse(razredService.obrisiOdeljenjeKojePripadaRazredu(razredId, odeljenjeId));
 	}

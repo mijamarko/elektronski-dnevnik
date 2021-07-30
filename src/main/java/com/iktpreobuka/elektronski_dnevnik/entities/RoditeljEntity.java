@@ -10,6 +10,9 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.iktpreobuka.elektronski_dnevnik.security.Views;
+
 @Entity
 @Table(name = "roditelji")
 @DiscriminatorValue("roditelj")
@@ -19,6 +22,7 @@ public class RoditeljEntity extends KorisnikEntity {
 	@JoinTable(name = "roditelji_deca",
 	joinColumns = @JoinColumn(name = "roditelj_id"),
 	inverseJoinColumns = @JoinColumn(name = "ucenik_id"))
+	@JsonView(Views.Admin.class)
 	private List<UcenikEntity> deca = new ArrayList<UcenikEntity>();
 
 	public RoditeljEntity() {

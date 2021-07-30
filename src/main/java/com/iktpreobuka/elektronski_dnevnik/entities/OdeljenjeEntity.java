@@ -22,6 +22,8 @@ import javax.validation.constraints.Min;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.iktpreobuka.elektronski_dnevnik.security.Views;
 
 @JsonIgnoreProperties({ "handler", "hibernateLazyInitializer" })
 @Entity
@@ -31,25 +33,31 @@ public class OdeljenjeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "odeljenje_id")
+	@JsonView(Views.Admin.class)
 	private Integer id;
 	
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	@JsonBackReference(value = "odeljenja")
 	@JoinColumn(name = "razred_id", nullable = false)
+	@JsonView(Views.Nastavnik.class)
 	private RazredEntity razred;
 	
 	@Min(value = 1, message = "Odeljenje ne moze biti nulto.")
+	@JsonView(Views.Nastavnik.class)
 	private Integer brojOdeljenja;
 	
 	@OneToMany(mappedBy = "odeljenjeKojePohadja", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	@JsonManagedReference(value = "odeljenjeKojePohadja")
+	@JsonView(Views.Nastavnik.class)
 	private List<UcenikEntity> ucenici = new ArrayList<UcenikEntity>();
 	
 	@OneToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY, mappedBy = "odeljenjeKomJeRazredni")
 	@JsonBackReference
+	@JsonView(Views.Ucenik.class)
 	private NastavnikEntity razredniStaresina;
 	
 	@ManyToMany(mappedBy = "odeljenjaKojaSlusajuPredmet")
+	@JsonView(Views.Ucenik.class)
 	private List<PredmetEntity> predmetiKojeOdeljenjeSlusa = new ArrayList<PredmetEntity>();
 	
 	@Version

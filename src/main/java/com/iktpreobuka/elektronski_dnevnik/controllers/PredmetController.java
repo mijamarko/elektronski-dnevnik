@@ -4,6 +4,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,41 +36,49 @@ public class PredmetController {
 	//DELETE obrisi odeljenje koje slusa predmet
 	
 	@GetMapping(path = "/")
+	@Secured("ROLE_ADMIN")
 	public ResponseEntity<?> dobaviSvePredmete() {
 		return handler.handleResponse(predmetService.dobaviSvePredmete());
 	}
 	
 	@GetMapping(path = "/{predmetId}")
+	@Secured({"ROLE_ADMIN", "ROLE_NASTAVNIK"})
 	public ResponseEntity<?> dobaviPredmetPoId(@PathVariable Integer predmetId) {
 		return handler.handleResponse(predmetService.dobaviPredmetPoId(predmetId));
 	}
 	
 	@PostMapping(path = "/")
+	@Secured("ROLE_ADMIN")
 	public ResponseEntity<?> napraviNoviPredmet(@Valid @RequestBody PredmetEntity predmet) {
 		return handler.handleResponse(predmetService.napraviNoviPredmet(predmet));
 	}
 	
 	@PostMapping(path = "/{predmetId}/nastavnici")
+	@Secured("ROLE_ADMIN")
 	public ResponseEntity<?> dodajNovogNastavnikaKojiPredajePredmet(@PathVariable Integer predmetId, @RequestParam Integer nastavnikId) {
 		return handler.handleResponse(predmetService.dodajNovogNastavnikaKojiPredajePredmet(predmetId, nastavnikId));
 	}
 
 	@PostMapping(path = "/{predmetId}/odeljenja")
+	@Secured("ROLE_ADMIN")
 	public ResponseEntity<?> dodajNovoOdeljenjeKojeSlusaPredmet(@PathVariable Integer predmetId, @RequestParam Integer odeljenjeId) {
 		return handler.handleResponse(predmetService.dodajNovoOdeljenjeKojeSlusaPredmet(predmetId, odeljenjeId));
 	}
 	
 	@DeleteMapping(path = "/{predmetId}")
+	@Secured("ROLE_ADMIN")
 	public ResponseEntity<?> obrisiPredmet(@PathVariable Integer predmetId) {
 		return handler.handleResponse(predmetService.obrisiPredmet(predmetId));
 	}
 	
 	@DeleteMapping(path = "/{predmetId}/nastavnici")
+	@Secured("ROLE_ADMIN")
 	public ResponseEntity<?> obrisiNastavnikaKojiPredajePredmet(@PathVariable Integer predmetId, @RequestParam Integer nastavnikId) {
 		return handler.handleResponse(predmetService.obrisiNastavnikaKojiPredajePredmet(predmetId, nastavnikId));
 	}
 	
 	@DeleteMapping(path = "/{predmetId}/odeljenja")
+	@Secured("ROLE_ADMIN")
 	public ResponseEntity<?> obrisiOdeljenjeKojeSlusaPredmet(@PathVariable Integer predmetId, @RequestParam Integer odeljenjeId) {
 		return handler.handleResponse(predmetService.obrisiOdeljenjeKojeSlusaPredmet(predmetId, odeljenjeId));
 	}

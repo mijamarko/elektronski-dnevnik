@@ -2,6 +2,7 @@ package com.iktpreobuka.elektronski_dnevnik.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,42 +35,50 @@ public class RoditeljController {
 	ServiceResponseHandler handler = new ServiceResponseHandler();
 	
 	@GetMapping(path = "/")
+	@Secured("ROLE_ADMIN")
 	public ResponseEntity<?> dobaviSveRoditelje() {
 		return handler.handleResponse(roditeljService.dobaviSveRoditelje());
 	}
 	
 	@GetMapping(path = "/{id}")
+	@Secured({"ROLE_ADMIN", "ROLE_RODITELJ"})
 	public ResponseEntity<?> dobaviRoditeljaPoId(@RequestParam Integer roditeljId) {
 		return handler.handleResponse(roditeljService.dobaviRoditeljaPoId(roditeljId));
 	}
 	
 	@GetMapping(path = "/{id}/deca")
+	@Secured({"ROLE_ADMIN", "ROLE_RODITELJ"})
 	public ResponseEntity<?> dobaviDecuRoditelja(@RequestParam Integer roditeljId) {
 		return handler.handleResponse(roditeljService.dobaviDecuRoditelja(roditeljId));
 	}
 
 	
 	@PutMapping(path = "/{id}/email")
+	@Secured({"ROLE_ADMIN", "ROLE_RODITELJ"})
 	public ResponseEntity<?> promeniEmail(@PathVariable Integer roditeljId, @RequestBody EmailDTO noviPodaci) {
 		return handler.handleResponse(roditeljService.promeniEmail(roditeljId, noviPodaci));
 	}
 	
 	@PutMapping(path = "/{id}/sifra")
+	@Secured({"ROLE_ADMIN", "ROLE_RODITELJ"})
 	public ResponseEntity<?> promeniSifru(@PathVariable Integer roditeljId, @RequestBody SifraDTO noviPodaci) {
 		return handler.handleResponse(roditeljService.promeniSifru(roditeljId, noviPodaci));
 	}
 	
 	@PostMapping(path = "/")
+	@Secured("ROLE_ADMIN")
 	public ResponseEntity<?> napraviNovogRoditelja(RoditeljEntity roditelj) {
 		return handler.handleResponse(roditeljService.napraviNovogRoditelja(roditelj));
 	}
 
 	@PostMapping(path = "/{id}/deca")
+	@Secured("ROLE_ADMIN")
 	public ResponseEntity<?> dodajDeteRoditelju(Integer roditeljId, Integer ucenikId) {
 		return handler.handleResponse(roditeljService.dodajDeteRoditelju(roditeljId, ucenikId));
 	}
 
 	@DeleteMapping(path = "/{id}")
+	@Secured("ROLE_ADMIN")
 	public ResponseEntity<?> obrisiRoditelja(Integer roditeljId) {
 		return handler.handleResponse(roditeljService.obrisiRoditelja(roditeljId));
 	}

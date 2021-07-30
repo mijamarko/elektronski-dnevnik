@@ -19,7 +19,9 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.iktpreobuka.elektronski_dnevnik.enums.EIzostanak;
+import com.iktpreobuka.elektronski_dnevnik.security.Views;
 
 @JsonIgnoreProperties({ "handler", "hibernateLazyInitializer" })
 
@@ -29,29 +31,35 @@ public class IzostanakEntity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	@JsonView(Views.Admin.class)
 	private Integer id;
 	
 	@Enumerated(EnumType.STRING)
+	@JsonView(Views.Nastavnik.class)
 	private EIzostanak tipIzostanka;
 	
 	@JsonFormat(shape = Shape.STRING,
 			pattern = "dd-MM-yyyy")
 	@PastOrPresent
+	@JsonView(Views.Nastavnik.class)
 	private Date datumIzostanka;
 	
 	@JsonFormat(shape = Shape.STRING,
 			pattern = "dd-MM-yyyy")
 	@PastOrPresent
+	@JsonView(Views.Nastavnik.class)
 	private Date datumUpisivanja;
 	
 	@JsonFormat(shape = Shape.STRING,
 			pattern = "dd-MM-yyyy")
 	@PastOrPresent
+	@JsonView(Views.Nastavnik.class)
 	private Date datumIzmene;
 	
 	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
 	@JoinColumn(name = "ucenikKojiJeIzostao")
 	@JsonBackReference(value = "izostanci")
+	@JsonView(Views.Nastavnik.class)
 	private UcenikEntity ucenikKojiJeIzostao;
 
 	public IzostanakEntity() {

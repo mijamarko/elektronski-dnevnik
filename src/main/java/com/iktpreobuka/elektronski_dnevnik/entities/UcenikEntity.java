@@ -16,11 +16,14 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.iktpreobuka.elektronski_dnevnik.security.Views;
 
 @JsonIgnoreProperties({ "handler", "hibernateLazyInitializer" })
 @Entity
 @Table(name = "ucenici")
 @DiscriminatorValue("ucenik")
+@JsonView(Views.Ucenik.class)
 public class UcenikEntity extends KorisnikEntity {
 	
 

@@ -16,7 +16,12 @@ public class Encryption {
 	}
 	
 	public static void main (String[] args) {
-		encodePasswordPls("nin123o456cka");
+		encodePasswordPls("Sifra123!");
 	}
+
+	public Encryption() {
+		super();
+	}	
+	
 
 }

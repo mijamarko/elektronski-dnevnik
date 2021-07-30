@@ -15,6 +15,8 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.iktpreobuka.elektronski_dnevnik.security.Views;
 
 @JsonIgnoreProperties({ "handler", "hibernateLazyInitializer" })
 @Entity
@@ -26,13 +28,16 @@ public class NastavnikEntity extends KorisnikEntity{
 	@OneToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
 	@JoinColumn(name = "odeljenje_id", referencedColumnName = "odeljenje_id")
 	@JsonManagedReference
+	@JsonView(Views.Nastavnik.class)
 	private OdeljenjeEntity odeljenjeKomJeRazredni;
 	
 	@ManyToMany(mappedBy = "predavaci")
+	@JsonView(Views.Nastavnik.class)
 	private List<PredmetEntity> predmetiKojePredaje = new ArrayList<PredmetEntity>();
 	
 	@OneToMany(mappedBy = "nastavnikKojiJeDaoOcenu")
 	@JsonManagedReference(value = "nastavnik_ocena")
+	@JsonView(Views.Nastavnik.class)
 	private List<OcenaEntity> dodeljeneOcene = new ArrayList<OcenaEntity>();
 
 	public NastavnikEntity() {
