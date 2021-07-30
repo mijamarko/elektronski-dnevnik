@@ -3,7 +3,7 @@ package com.iktpreobuka.elektronski_dnevnik.controllers;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import com.iktpreobuka.elektronski_dnevnik.dto.responses.ServiceResponse;
+import com.iktpreobuka.elektronski_dnevnik.dto.ServiceResponse;
 import com.iktpreobuka.elektronski_dnevnik.util.RestError;
 
 public class ServiceResponseHandler {

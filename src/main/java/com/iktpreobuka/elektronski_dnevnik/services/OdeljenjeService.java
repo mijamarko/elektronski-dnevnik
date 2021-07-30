@@ -1,6 +1,6 @@
 package com.iktpreobuka.elektronski_dnevnik.services;
 
-import com.iktpreobuka.elektronski_dnevnik.dto.responses.ServiceResponse;
+import com.iktpreobuka.elektronski_dnevnik.dto.ServiceResponse;
 import com.iktpreobuka.elektronski_dnevnik.entities.OdeljenjeEntity;
 
 public interface OdeljenjeService {

@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.iktpreobuka.elektronski_dnevnik.dto.responses.ServiceResponse;
+import com.iktpreobuka.elektronski_dnevnik.dto.ServiceResponse;
 import com.iktpreobuka.elektronski_dnevnik.entities.NastavnikEntity;
 import com.iktpreobuka.elektronski_dnevnik.entities.OdeljenjeEntity;
 import com.iktpreobuka.elektronski_dnevnik.entities.PredmetEntity;
@@ -85,10 +85,13 @@ public class PredmetServiceImpl implements PredmetService{
 				if(odeljenjeRepository.findById(odeljenjeId).isPresent()) {
 					PredmetEntity predmet = oppredmet.get();
 					OdeljenjeEntity odeljenje = odeljenjeRepository.findById(odeljenjeId).get();
-					predmet.getOdeljenjaKojaSlusajuPredmet().add(odeljenje);
-					predmetRepository.save(predmet);
-					//odeljenjeService.dodajPredmetKojiOdeljenjeSlusa(predmetId);
-					return new ServiceResponse("Predmet uspesno dodeljen odeljenju", HttpStatus.OK);
+					ServiceResponse response = odeljenjeService.dodajPredmetKojiOdeljenjeSlusa(odeljenjeId, predmetId);
+					if(response.getHttpStatus() != HttpStatus.BAD_REQUEST) {
+						predmet.getOdeljenjaKojaSlusajuPredmet().add(odeljenje);
+						predmetRepository.save(predmet);
+						return response;
+					}
+					return response;
 				}
 				return new ServiceResponse("O-2", "Odeljenje ne postoji", HttpStatus.BAD_REQUEST);
 		}
@@ -103,7 +106,7 @@ public class PredmetServiceImpl implements PredmetService{
 				nastavnikService.obrisiPredmetNastavniku(n.getId(), predmetId);
 			});
 			predmet.getOdeljenjaKojaSlusajuPredmet().forEach(o -> {
-				//odeljenjeService.obrisiPredmetKojiOdeljenjeSlusa(o.getId(), predmetId);
+				odeljenjeService.obrisiPredmetKojiOdeljenjeSlusa(o.getId(), predmetId);
 			});
 			predmetRepository.delete(predmet);
 			return new ServiceResponse("Predmet uspesno obrisan", HttpStatus.OK);
@@ -128,7 +131,7 @@ public class PredmetServiceImpl implements PredmetService{
 		if(predmetRepository.existsById(predmetId)) {
 			PredmetEntity predmet = predmetRepository.findById(predmetId).get();
 			predmet.getOdeljenjaKojaSlusajuPredmet().removeIf(o -> o.getId() == odeljenjeId);
-			//odeljenjeService.obrisiPredmetKojiOdeljenjeSlusa(odeljenjeId, predmetId);
+			odeljenjeService.obrisiPredmetKojiOdeljenjeSlusa(odeljenjeId, predmetId);
 			predmetRepository.save(predmet);
 			return new ServiceResponse("Odeljenje uspesno obrisana iz liste odeljenja koja slusaju predmet", HttpStatus.OK);
 		}

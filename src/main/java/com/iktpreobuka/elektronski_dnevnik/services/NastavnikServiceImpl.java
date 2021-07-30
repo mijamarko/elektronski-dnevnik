@@ -8,8 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.iktpreobuka.elektronski_dnevnik.dto.EmailDTO;
+import com.iktpreobuka.elektronski_dnevnik.dto.ServiceResponse;
 import com.iktpreobuka.elektronski_dnevnik.dto.SifraDTO;
-import com.iktpreobuka.elektronski_dnevnik.dto.responses.ServiceResponse;
 import com.iktpreobuka.elektronski_dnevnik.entities.KorisnikEntity;
 import com.iktpreobuka.elektronski_dnevnik.entities.NastavnikEntity;
 import com.iktpreobuka.elektronski_dnevnik.entities.OdeljenjeEntity;
@@ -37,6 +37,9 @@ public class NastavnikServiceImpl implements NastavnikService {
 	
 	@Autowired
 	private PredmetServiceImpl predmetService;
+	
+	@Autowired
+	private OdeljenjeServiceImpl odeljenjeService;
 
 
 	@Override
@@ -148,15 +151,13 @@ public class NastavnikServiceImpl implements NastavnikService {
 		if(korisnik.isPresent()) {
 			NastavnikEntity nastavnik = (NastavnikEntity) korisnik.get();
 			if(nastavnik.getOdeljenjeKomJeRazredni() == null) {
-				Optional<OdeljenjeEntity> odeljenje = odeljenjeRepository.findById(odeljenjeId);
-				if(odeljenje.isPresent()) {
-					nastavnik.setOdeljenjeKomJeRazredni(odeljenje.get());
+				ServiceResponse response = odeljenjeService.dodajRazrednogStaresinuOdeljenju(odeljenjeId, nastavnikId);
+				if(response.getHttpStatus() != HttpStatus.BAD_REQUEST) {
+					nastavnik.setOdeljenjeKomJeRazredni((OdeljenjeEntity) response.getValue());
 					nastavnikRepository.save(nastavnik);
-					odeljenje.get().setRazredniStaresina(nastavnik);
-					odeljenjeRepository.save(odeljenje.get());
 					return new ServiceResponse("Odeljenje uspesno dodato nastavniku", HttpStatus.OK);
 				}
-				return new ServiceResponse("O-1", "Odeljenje ne postoji", HttpStatus.BAD_REQUEST);
+				return response;
 			}
 			return new ServiceResponse("N-4", "Nastavnik je vec razredni nekom odeljenju", HttpStatus.BAD_REQUEST);
 		}

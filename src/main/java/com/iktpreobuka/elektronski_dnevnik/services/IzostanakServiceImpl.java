@@ -3,13 +3,15 @@ package com.iktpreobuka.elektronski_dnevnik.services;
 import java.sql.Date;
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.iktpreobuka.elektronski_dnevnik.dto.IzostanakIzmenaDTO;
 import com.iktpreobuka.elektronski_dnevnik.dto.IzostanciDTO;
-import com.iktpreobuka.elektronski_dnevnik.dto.responses.ServiceResponse;
+import com.iktpreobuka.elektronski_dnevnik.dto.ServiceResponse;
 import com.iktpreobuka.elektronski_dnevnik.entities.IzostanakEntity;
 import com.iktpreobuka.elektronski_dnevnik.entities.OdeljenjeEntity;
 import com.iktpreobuka.elektronski_dnevnik.entities.UcenikEntity;
@@ -21,6 +23,8 @@ public class IzostanakServiceImpl implements IzostanakService {
 
 	@Autowired
 	private IzostanakRepository izostanakRepository;
+	
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Override
 	public ServiceResponse dodajNoveIzostanke(UcenikEntity ucenik, IzostanciDTO noviIzostanci) {
