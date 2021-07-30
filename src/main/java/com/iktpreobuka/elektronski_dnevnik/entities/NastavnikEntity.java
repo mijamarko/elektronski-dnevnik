@@ -8,13 +8,13 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.iktpreobuka.elektronski_dnevnik.entities.relationships.NastavnikPredajePredmet;
 
 @JsonIgnoreProperties({ "handler", "hibernateLazyInitializer" })
 @Entity
@@ -28,8 +28,12 @@ public class NastavnikEntity extends KorisnikEntity{
 	@JsonManagedReference
 	private OdeljenjeEntity odeljenjeKomJeRazredni;
 	
-	@OneToMany(mappedBy = "nastavnik")
-	private List<NastavnikPredajePredmet> predmetiKojePredaje = new ArrayList<NastavnikPredajePredmet>();
+	@ManyToMany(mappedBy = "predavaci")
+	private List<PredmetEntity> predmetiKojePredaje = new ArrayList<PredmetEntity>();
+	
+	@OneToMany(mappedBy = "nastavnikKojiJeDaoOcenu")
+	@JsonManagedReference(value = "nastavnik_ocena")
+	private List<OcenaEntity> dodeljeneOcene = new ArrayList<OcenaEntity>();
 
 	public NastavnikEntity() {
 		super();
@@ -44,13 +48,22 @@ public class NastavnikEntity extends KorisnikEntity{
 		this.odeljenjeKomJeRazredni = odeljenjeKomJeRazredni;
 	}
 
-	public List<NastavnikPredajePredmet> getPredmetiKojePredaje() {
+	public List<PredmetEntity> getPredmetiKojePredaje() {
 		return predmetiKojePredaje;
 	}
 
-	public void setPredmetiKojePredaje(List<NastavnikPredajePredmet> predmetiKojePredaje) {
+	public void setPredmetiKojePredaje(List<PredmetEntity> predmetiKojePredaje) {
 		this.predmetiKojePredaje = predmetiKojePredaje;
 	}
+
+	public List<OcenaEntity> getDodeljeneOcene() {
+		return dodeljeneOcene;
+	}
+
+	public void setDodeljeneOcene(List<OcenaEntity> dodeljeneOcene) {
+		this.dodeljeneOcene = dodeljeneOcene;
+	}
+	
 	
 	
 	

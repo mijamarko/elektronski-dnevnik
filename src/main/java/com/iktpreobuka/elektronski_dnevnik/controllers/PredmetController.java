@@ -55,8 +55,8 @@ public class PredmetController {
 	}
 
 	@PostMapping(path = "/{predmetId}/odeljenja")
-	public ResponseEntity<?> dodajNovoOdeljenjeKojeSlusaPredmet(@PathVariable Integer predmetId, @RequestParam Integer nastavnikId, @RequestParam Integer odeljenjeId) {
-		return handler.handleResponse(predmetService.dodajNovoOdeljenjeKojeSlusaPredmet(predmetId, nastavnikId, odeljenjeId));
+	public ResponseEntity<?> dodajNovoOdeljenjeKojeSlusaPredmet(@PathVariable Integer predmetId, @RequestParam Integer odeljenjeId) {
+		return handler.handleResponse(predmetService.dodajNovoOdeljenjeKojeSlusaPredmet(predmetId, odeljenjeId));
 	}
 	
 	@DeleteMapping(path = "/{predmetId}")

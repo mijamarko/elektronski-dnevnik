@@ -1,4 +1,4 @@
-package com.iktpreobuka.elektronski_dnevnik.dto.responses;
+package com.iktpreobuka.elektronski_dnevnik.dto;
 
 import org.springframework.http.HttpStatus;
 

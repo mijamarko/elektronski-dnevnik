@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import com.iktpreobuka.elektronski_dnevnik.dto.EmailDTO;
 import com.iktpreobuka.elektronski_dnevnik.dto.IzostanakIzmenaDTO;
 import com.iktpreobuka.elektronski_dnevnik.dto.IzostanciDTO;
+import com.iktpreobuka.elektronski_dnevnik.dto.ServiceResponse;
 import com.iktpreobuka.elektronski_dnevnik.dto.SifraDTO;
-import com.iktpreobuka.elektronski_dnevnik.dto.responses.ServiceResponse;
 import com.iktpreobuka.elektronski_dnevnik.entities.IzostanakEntity;
 import com.iktpreobuka.elektronski_dnevnik.entities.KorisnikEntity;
 import com.iktpreobuka.elektronski_dnevnik.entities.OcenaEntity;
@@ -43,6 +43,9 @@ public class UcenikServiceImpl implements UcenikService {
 
 	@Autowired
 	private IzostanakServiceImpl izostanakService;
+	
+	@Autowired
+	private OdeljenjeServiceImpl odeljenjeService;
 
 	@Override
 	public ServiceResponse dobaviSveUcenike() {
@@ -171,7 +174,7 @@ public class UcenikServiceImpl implements UcenikService {
 			UcenikEntity ucenik = (UcenikEntity) korisnik.get();
 			ArrayList<OcenaEntity> ocene = new ArrayList<OcenaEntity>();
 			ucenik.getOcene().forEach(o -> {
-				if (o.getNastavnikPredmet().getPredmet().getId() == predmetId) {
+				if (o.getPredmetIzKogJeOcena().getId() == predmetId) {
 					ocene.add(o);
 				}
 			});
@@ -193,12 +196,16 @@ public class UcenikServiceImpl implements UcenikService {
 			if (trenutnoOdeljenje != null) {
 				Optional<OdeljenjeEntity> novoOdeljenje = odeljenjeRepository.findById(odeljenjeId);
 				if (novoOdeljenje.isPresent()) {
-					trenutnoOdeljenje.getUcenici().remove(ucenik);
-					odeljenjeRepository.save(trenutnoOdeljenje);
+					ServiceResponse obrisiResponse = odeljenjeService.obrisiUcenikaIzOdeljenja(odeljenjeId, ucenikId);
+					if(obrisiResponse.getHttpStatus() == HttpStatus.BAD_REQUEST) {
+						return obrisiResponse;
+					}
+					ServiceResponse dodajResponse = odeljenjeService.dodajUcenikaUOdeljenje(novoOdeljenje.get().getId(), ucenikId);
+					if(dodajResponse.getHttpStatus() == HttpStatus.BAD_REQUEST) {
+						return dodajResponse;
+					}
 					ucenik.setOdeljenjeKojePohadja(novoOdeljenje.get());
 					ucenikRepository.save(ucenik);
-					novoOdeljenje.get().getUcenici().add(ucenik);
-					odeljenjeRepository.save(novoOdeljenje.get());
 					return new ServiceResponse("Odeljenje uspesno promenjeno", HttpStatus.OK, ucenik);
 				}
 				return new ServiceResponse("O-2", "Odeljenje ne postoji", HttpStatus.BAD_REQUEST);

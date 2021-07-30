@@ -4,7 +4,7 @@ import java.sql.Date;
 
 import com.iktpreobuka.elektronski_dnevnik.dto.IzostanakIzmenaDTO;
 import com.iktpreobuka.elektronski_dnevnik.dto.IzostanciDTO;
-import com.iktpreobuka.elektronski_dnevnik.dto.responses.ServiceResponse;
+import com.iktpreobuka.elektronski_dnevnik.dto.ServiceResponse;
 import com.iktpreobuka.elektronski_dnevnik.entities.OdeljenjeEntity;
 import com.iktpreobuka.elektronski_dnevnik.entities.UcenikEntity;
 

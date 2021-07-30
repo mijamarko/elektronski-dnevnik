@@ -8,12 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.iktpreobuka.elektronski_dnevnik.dto.responses.ServiceResponse;
+import com.iktpreobuka.elektronski_dnevnik.dto.ServiceResponse;
 import com.iktpreobuka.elektronski_dnevnik.entities.NastavnikEntity;
 import com.iktpreobuka.elektronski_dnevnik.entities.OcenaEntity;
 import com.iktpreobuka.elektronski_dnevnik.entities.OdeljenjeEntity;
 import com.iktpreobuka.elektronski_dnevnik.entities.UcenikEntity;
-import com.iktpreobuka.elektronski_dnevnik.entities.relationships.NastavnikPredajePredmet;
 import com.iktpreobuka.elektronski_dnevnik.enums.EPolugodiste;
 import com.iktpreobuka.elektronski_dnevnik.enums.ETip_Ocene;
 import com.iktpreobuka.elektronski_dnevnik.repositories.NastavnikRepository;
@@ -31,9 +30,6 @@ public class OcenaServiceImpl implements OcenaService {
 	
 	@Autowired
 	private PredmetRepository predmetRepository;
-	
-	@Autowired
-	private UcenikServiceImpl ucenikService;
 
 	@Override
 	public ServiceResponse dodajNovuOcenu(UcenikEntity ucenik, Integer predmetId, Integer nastavnikId,
@@ -44,7 +40,8 @@ public class OcenaServiceImpl implements OcenaService {
 		novaOcena.setPolugodiste(polugodiste);
 		novaOcena.setTipOcene(tipOcene);
 		novaOcena.setPolugodiste(polugodiste);
-		novaOcena.setNastavnikPredmet(new NastavnikPredajePredmet((NastavnikEntity) nastavnikRepository.findById(nastavnikId).get(), predmetRepository.findById(predmetId).get()));
+		novaOcena.setNastavnikKojiJeDaoOcenu((NastavnikEntity) nastavnikRepository.findById(nastavnikId).get());
+		novaOcena.setPredmetIzKogJeOcena(predmetRepository.findById(predmetId).get());
 		ocenaRepository.save(novaOcena);
 		return new ServiceResponse("Ocena uspesno dodata", HttpStatus.OK, novaOcena);
 	}
@@ -74,7 +71,7 @@ public class OcenaServiceImpl implements OcenaService {
 		ArrayList<OcenaEntity> ocene = new ArrayList<>();
 		double prosek = 0.0;
 		ocenaRepository.findByUcenik(ucenik).forEach(o -> {
-			if(o.getNastavnikPredmet().getPredmet().getId() == predmetId && o.getPolugodiste() == polugodiste) {
+			if(o.getPredmetIzKogJeOcena().getId() == predmetId && o.getPolugodiste() == polugodiste) {
 				ocene.add(o);
 			}
 		});
@@ -94,7 +91,7 @@ public class OcenaServiceImpl implements OcenaService {
 		ArrayList<OcenaEntity> ocene = new ArrayList<>();
 		double prosek = 0.0;
 		ocenaRepository.findByUcenik(ucenik).forEach(o -> {
-			if(o.getNastavnikPredmet().getPredmet().getId() == predmetId && o.getTipOcene() == ETip_Ocene.ZAKLJUCNA_OCENA_POLUGODISTE) {
+			if(o.getPredmetIzKogJeOcena().getId() == predmetId && o.getTipOcene() == ETip_Ocene.ZAKLJUCNA_OCENA_POLUGODISTE) {
 				ocene.add(o);
 			}
 		});

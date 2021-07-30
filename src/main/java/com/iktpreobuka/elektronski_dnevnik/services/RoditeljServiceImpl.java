@@ -8,8 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.iktpreobuka.elektronski_dnevnik.dto.EmailDTO;
+import com.iktpreobuka.elektronski_dnevnik.dto.ServiceResponse;
 import com.iktpreobuka.elektronski_dnevnik.dto.SifraDTO;
-import com.iktpreobuka.elektronski_dnevnik.dto.responses.ServiceResponse;
 import com.iktpreobuka.elektronski_dnevnik.entities.KorisnikEntity;
 import com.iktpreobuka.elektronski_dnevnik.entities.RoditeljEntity;
 import com.iktpreobuka.elektronski_dnevnik.entities.RoleEntity;
