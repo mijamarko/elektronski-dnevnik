@@ -8,9 +8,13 @@ import com.iktpreobuka.elektronski_dnevnik.security.Views;
 @JsonView(Views.Ucenik.class)
 public class ServiceResponse {
 	
+
 	private String kod;
+
 	private String poruka;
+
 	private HttpStatus httpStatus;
+
 	private Object value;
 	
 	public ServiceResponse() {

@@ -1,18 +1,20 @@
 package com.iktpreobuka.elektronski_dnevnik.util;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.iktpreobuka.elektronski_dnevnik.security.Views;
+
+@JsonView(Views.Ucenik.class)
 public class RestError {
 	
+
 	private String kod;
+
 	private String poruka;
 	
 	public RestError() {
 		super();
 	}
-	public RestError(String kod, String poruka) {
-		super();
-		this.kod = kod;
-		this.poruka = poruka;
-	}
+	
 	public String getKod() {
 		return kod;
 	}
@@ -26,6 +28,10 @@ public class RestError {
 		this.poruka = poruka;
 	}
 	
-	
+	public RestError(String kod, String poruka) {
+		super();
+		this.kod = kod;
+		this.poruka = poruka;
+	}
 
 }

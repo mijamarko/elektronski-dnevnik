@@ -62,7 +62,7 @@ public class RazredServiceImpl implements RazredService {
 			razredRepository.save(razred);
 			return new ServiceResponse("Razred uspesno kreiran", HttpStatus.OK, razred);
 		}
-		return new ServiceResponse("R-4", "Razred sa zadatim imenom vec postoji", HttpStatus.BAD_REQUEST);
+		return new ServiceResponse("R-4", "Razred sa zadatim brojem vec postoji", HttpStatus.BAD_REQUEST);
 	}
 
 	@Override

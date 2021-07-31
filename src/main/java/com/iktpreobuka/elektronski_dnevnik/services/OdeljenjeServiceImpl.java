@@ -211,7 +211,7 @@ public class OdeljenjeServiceImpl implements OdeljenjeService {
 		Optional<RazredEntity> oprazred = razredRepository.findById(razredId);
 		if (oprazred.isPresent()) {
 			RazredEntity razred = oprazred.get();
-			ArrayList<OdeljenjeEntity> odeljenja = (ArrayList<OdeljenjeEntity>) razred.getOdeljenja();
+			ArrayList<OdeljenjeEntity> odeljenja = new ArrayList<OdeljenjeEntity>();
 			razred.getOdeljenja().forEach(o -> {
 				if (o.getId() == odeljenjeId) {
 					odeljenja.add(o);
@@ -219,8 +219,8 @@ public class OdeljenjeServiceImpl implements OdeljenjeService {
 			});
 			if (odeljenja.size() == 0) {
 				razred.getOdeljenja().add(odeljenjeRepository.findById(odeljenjeId).get());
-				odeljenjeRepository.save(odeljenjeRepository.findById(odeljenjeId).get());
 				razredService.dodajNovoOdeljenjeRazredu(razredId, odeljenjeId);
+				odeljenjeRepository.save(odeljenjeRepository.findById(odeljenjeId).get());
 				logger.info("Razred %d uspesno dodat odeljenju %d", razredId, odeljenjeId);
 				return new ServiceResponse("Razred uspesno dodat odeljenju", HttpStatus.OK);
 			}

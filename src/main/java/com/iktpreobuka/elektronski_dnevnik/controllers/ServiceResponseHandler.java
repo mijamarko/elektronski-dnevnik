@@ -13,11 +13,16 @@ import com.iktpreobuka.elektronski_dnevnik.util.RestError;
 @JsonView(Views.Ucenik.class)
 public class ServiceResponseHandler {
 	
+
 	public ResponseEntity<?> handleResponse(ServiceResponse response){
-		if(response.getHttpStatus() == HttpStatus.OK) {
+		if(response.getHttpStatus().equals(HttpStatus.OK)) {
 			return new ResponseEntity<ServiceResponse>(new ServiceResponse(response.getPoruka(), response.getHttpStatus(), response.getValue()), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<RestError>(new RestError(response.getKod(), response.getPoruka()), HttpStatus.BAD_REQUEST);
+//			System.out.println(new RestError("da li", "ovo radi"));
+//			return new ResponseEntity<RestError>(new RestError("da li", "ovo radi"), HttpStatus.BAD_REQUEST);
 		}
-		return new ResponseEntity<RestError>(new RestError(response.getKod(), response.getPoruka()), HttpStatus.BAD_REQUEST);
+		
 	}
 
 }

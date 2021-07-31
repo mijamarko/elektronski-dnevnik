@@ -42,7 +42,9 @@ public class RoditeljServiceImpl implements RoditeljService {
 		logger.info("Ulazi u metodu dobaviSveRoditelje");
 		ArrayList<RoditeljEntity> roditelji = new ArrayList<RoditeljEntity>();
 		roditeljRepository.findAll().forEach(n -> {
-			roditelji.add((RoditeljEntity) n);
+			if(n.getRole().getName().equals("ROLE_RODITELJ")) {
+				roditelji.add((RoditeljEntity) n);
+			}
 		});
 		if (roditelji.size() > 0) {
 			return new ServiceResponse("Pronadjeni roditelji", HttpStatus.OK,  roditelji);
@@ -129,6 +131,8 @@ public class RoditeljServiceImpl implements RoditeljService {
 			roditelj.setRole(role);
 			roditelj.setSifra(encoder.encode(roditelj.getSifra()));
 			roditeljRepository.save(roditelj);
+			role.getUsers().add(roditelj);
+			roleRepository.save(role);
 			return new ServiceResponse("Roditelj uspesno kreiran", HttpStatus.OK, roditelj);
 		}
 		logger.error("Roditelj sa emailom %s vec postoji", roditelj.getEmail());

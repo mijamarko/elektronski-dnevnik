@@ -38,7 +38,6 @@ public class OcenaEntity {
 	private Integer id;
 	
 	@JsonFormat(shape = Shape.STRING, pattern = "dd-MM-yyyy")
-	@PastOrPresent
 	@JsonView(Views.Ucenik.class)
 	private Date datumDodele;
 	

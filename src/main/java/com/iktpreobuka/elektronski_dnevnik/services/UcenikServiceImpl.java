@@ -64,7 +64,7 @@ public class UcenikServiceImpl implements UcenikService {
 			}
 		});
 		if (ucenici.size() > 0) {
-			return new ServiceResponse("Pronadjeni ucenicic", HttpStatus.OK, ucenici);
+			return new ServiceResponse("Pronadjeni ucenici", HttpStatus.OK, ucenici);
 		}
 		logger.error("Nema ucenika");
 		return new ServiceResponse("U-1", "Nema ucenika", HttpStatus.BAD_REQUEST);

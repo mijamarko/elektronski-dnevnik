@@ -38,6 +38,21 @@ public class LogController {
 	//DELETE logs for date
 	//DELETE logs between dates
 	
+	@GetMapping(path = "/curent")
+	public ResponseEntity dobaviTrenutniLog() {
+		Path path = Paths.get(BASE_PATH + LOG_FILE_NAME + ".log");
+		Resource resource = null;
+		try {
+			resource = new UrlResource(path.toUri());
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+		return ResponseEntity.ok()
+				.contentType(MediaType.APPLICATION_OCTET_STREAM)
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"").body(resource);
+	}
+	
+	
 	@GetMapping(path = "/{datum:.+}")
 	public ResponseEntity dobaviLogZaDatum(@PathVariable String datum) {
 		Path path = Paths.get(BASE_PATH + LOG_FILE_NAME + "_" + datum + ".log");

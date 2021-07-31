@@ -38,7 +38,7 @@ public class OdeljenjeEntity {
 	
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	@JsonBackReference(value = "odeljenja")
-	@JoinColumn(name = "razred_id", nullable = false)
+	@JoinColumn(name = "razred_id")
 	@JsonView(Views.Nastavnik.class)
 	private RazredEntity razred;
 	

@@ -1,5 +1,7 @@
 package com.iktpreobuka.elektronski_dnevnik.controllers;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -67,19 +69,19 @@ public class RoditeljController {
 	
 	@PostMapping(path = "/")
 	@Secured("ROLE_ADMIN")
-	public ResponseEntity<?> napraviNovogRoditelja(RoditeljEntity roditelj) {
+	public ResponseEntity<?> napraviNovogRoditelja(@Valid @RequestBody RoditeljEntity roditelj) {
 		return handler.handleResponse(roditeljService.napraviNovogRoditelja(roditelj));
 	}
 
 	@PostMapping(path = "/{id}/deca")
 	@Secured("ROLE_ADMIN")
-	public ResponseEntity<?> dodajDeteRoditelju(Integer roditeljId, Integer ucenikId) {
+	public ResponseEntity<?> dodajDeteRoditelju(@PathVariable Integer roditeljId, @RequestParam Integer ucenikId) {
 		return handler.handleResponse(roditeljService.dodajDeteRoditelju(roditeljId, ucenikId));
 	}
 
 	@DeleteMapping(path = "/{id}")
 	@Secured("ROLE_ADMIN")
-	public ResponseEntity<?> obrisiRoditelja(Integer roditeljId) {
+	public ResponseEntity<?> obrisiRoditelja(@PathVariable Integer roditeljId) {
 		return handler.handleResponse(roditeljService.obrisiRoditelja(roditeljId));
 	}
 
